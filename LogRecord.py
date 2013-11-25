@@ -2,10 +2,10 @@ __author__ = 'rlv'
 
 import datetime
 import re
-from LogFileHelper import get_date_from_string, get_browser_from_agent, get_OS_from_agent, get_verb_from_request
+from LogFileHelper import get_browser_from_agent, get_OS_from_agent, get_verb_from_request, get_date_from_string_logtime
+
 
 class LogRecord:
-
     REQUESTING_URL = "RequestingUrl"
     DATETIME_OF_REQUEST = "TimeOfRequest"
     TIME_OF_REQUEST = "TimeOnlyOfRequest"
@@ -47,10 +47,10 @@ class LogRecord:
         self.Requesting_URL = data[self.get_cur_index()]
         #self.RemoteLogName = data[self.getCurIndex()] # always '-'
         self.User = data[self.get_cur_index()]
-        self.TimeOfRequest = get_date_from_string(data[self.get_cur_index()], "-0400")
-        self.DayOfWeek = self.TimeOfRequest.weekday()
+        #self.TimeOfRequest = get_date_from_string(data[self.get_cur_index()], "-0400")
+        self.TimeOfRequest = get_date_from_string_logtime(data[self.get_cur_index()])
         time_of_req = self.TimeOfRequest.time()
-        self.TimeOnly = time_of_req.second + 60 *(time_of_req.minute + 60*time_of_req.hour)
+        self.TimeOnly = time_of_req.second + 60 * (time_of_req.minute + 60 * time_of_req.hour)
         self.Request = data[self.get_cur_index()]
         self.Verb = get_verb_from_request(self.Request)
         self.Status = int(data[self.get_cur_index()])
@@ -71,25 +71,25 @@ class LogRecord:
 
     def toJSON(self):
         doc = {
-            "URL" : self.Virtual_URL,
-            self.REQUESTING_URL : self.Requesting_URL,
-            "RemoteLogName" : self.RemoteLogName,
-            "RemoteUser" : self.User,
-            self.DATETIME_OF_REQUEST : self.TimeOfRequest,
-            "DayOfWeek" : self.DayOfWeek,
-            self.TIME_OF_REQUEST : self.TimeOnly,
-            "Request" : self.Request,
-            "Verb" : self.Verb,
-            "Status" : self.Status,
-            "Bytes" : self.Bytes,
-            "Referrer" : self.Referrer,
-            "UserAgent" : self.UserAgent,
-            "OS" : self.OS,
-            "Browser" : self.Browser,
-            "MozillaParameters" : self.Mozilla_parms,
-            "UniqueId" : self.UniqueId,
-            "MemoryUse" : self.memoryUse,
-            "ProcessingTime" : self.ProcessingTime
+            "URL": self.Virtual_URL,
+            self.REQUESTING_URL: self.Requesting_URL,
+            "RemoteLogName": self.RemoteLogName,
+            "RemoteUser": self.User,
+            self.DATETIME_OF_REQUEST: self.TimeOfRequest,
+            "DayOfWeek": self.DayOfWeek,
+            self.TIME_OF_REQUEST: self.TimeOnly,
+            "Request": self.Request,
+            "Verb": self.Verb,
+            "Status": self.Status,
+            "Bytes": self.Bytes,
+            "Referrer": self.Referrer,
+            "UserAgent": self.UserAgent,
+            "OS": self.OS,
+            "Browser": self.Browser,
+            "MozillaParameters": self.Mozilla_parms,
+            "UniqueId": self.UniqueId,
+            "MemoryUse": self.memoryUse,
+            "ProcessingTime": self.ProcessingTime
         }
         return doc
 
@@ -101,11 +101,13 @@ class LogRecord:
 
     def parse_apache_data_line(self, line):
         """
+            www.escapistmagazine.com 80.149.31.40 - Eagle Est1986 [24/Sep/2013:10:56:14 -0400] "GET /rss/videos/podcast/101-7908c74999845d359b932967635cd965.xml?uid=226565 HTTP/1.1" 200 227176 "-" "iTunes/11.1 (Macintosh; OS X 10.7.5) AppleWebKit/534.57.7" "- -" UkGoDgoAAGgAAFCvorsAAABM 2621440 1'
+
             Regex will match this log format:
-             LogFormat "%V %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"
-                      \"%{X-Moz}i %{X-Purpose}i\" %{UNIQUE_ID}e %{mod_php_memory_usage}n %T"
+            LogFormat "%V %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" \"%{X-Moz}i %{X-Purpose}i\" %{UNIQUE_ID}e %{mod_php_memory_usage}n %T"
+
             %V = virtual
-            %h = host
+            %h = host - requesting url
             %l = not sure, but it is always '-'
             %u = user
             %t = time, in braces

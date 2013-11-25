@@ -1,7 +1,10 @@
 __author__ = 'rlv'
 
 import re
-import datetime
+from datetime import timedelta, datetime
+from pytz import timezone
+import pytz
+
 
 def get_verb_from_request(request):
     regex = '(\S*)\s.*'
@@ -10,6 +13,7 @@ def get_verb_from_request(request):
         return matches.groups()[0]
     else:
         return "NONE"
+
 
 def get_browser_from_agent(agent):
     if re.search('chrome', agent, re.I):
@@ -26,6 +30,7 @@ def get_browser_from_agent(agent):
         return "Opera"
     return agent
 
+
 def get_OS_from_agent(agent):
     if re.search('macintosh', agent, re.I):
         return "Mac"
@@ -39,15 +44,47 @@ def get_OS_from_agent(agent):
         return "iPad"
     return agent
 
+
 def agent_is_a_bot(agent):
     regex = 'bot |get | get|crawl|slurp|fetch|spider|search|engine|valid|check|finder|^(ruby|java)|libwww|livejournal|heritrix|yandex|urllib|setooz|longurl|grabber|wordpress|pipes|kimengi|larbin|binlar|eventmachine|feed\s+parse|webvac|btwebclient|mediapartners|ocelli'
-    if re.search(regex,agent,re.I):
+    if re.search(regex, agent, re.I):
         return True
     else:
         return False
+
 
 def get_date_from_string(dateString, offset):
     #21/Sep/2013:06:32:01 -0400
     #21/Sep/2013:00:00:00 +0000
     date = datetime.datetime.strptime(dateString, "%d/%b/%Y:%H:%M:%S " + offset)
     return date
+
+
+def get_date_from_string_logtime(dateString):
+    fmt = "%d/%b/%Y:%H:%M:%S"
+    logtime = datetime.strptime(dateString[:-6], fmt)
+    logtimezone = timezone("Etc/GMT+4")
+    loc_logtime = logtimezone.localize(logtime)
+    utclogtime = loc_logtime.astimezone(pytz.utc)
+    return utclogtime
+
+
+def get_date_from_string_cdntime(dateString):
+    fmt = "%d/%b/%Y:%H:%M:%S"
+    logtime = datetime.strptime(dateString[:-6], fmt)
+    logtimezone = pytz.utc
+    utclogtime = logtimezone.localize(logtime)
+    return utclogtime
+
+
+def get_date_from_string_2(dateString, offset):
+    try:
+        offset = int(dateString[-5:])
+    except:
+        print "Error"
+
+    fmt = "%d/%b/%Y:%H:%M:%S"
+    delta = timedelta(hours=offset / 100)
+    logtime = datetime.strptime(dateString[:-6], fmt)
+    logtime -= delta
+    return logtime
