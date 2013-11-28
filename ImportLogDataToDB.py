@@ -12,7 +12,7 @@ def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
     for line in f:
         lineNum += 1
         logRecord = LogRecord(line)
-        if logRecord.All_Data_Valid:
+        if logRecord.all_data_valid:
             if lineNum % 100000 == 0:
                 print "PROCESSING LINE {0}".format(lineNum)
             if lineNum % skip_rows == 0:

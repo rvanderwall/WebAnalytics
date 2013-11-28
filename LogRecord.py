@@ -2,7 +2,7 @@ __author__ = 'rlv'
 
 import datetime
 import re
-from LogFileHelper import get_browser_from_agent, get_OS_from_agent, get_verb_from_request, get_date_from_string_logtime
+from LogFileHelper import get_browser_from_agent, get_OS_from_agent, get_verb_from_request, get_date_from_string_logtime, get_url_details
 
 
 class LogRecord:
@@ -12,7 +12,7 @@ class LogRecord:
 
     indexable_fields = [REQUESTING_URL, DATETIME_OF_REQUEST, TIME_OF_REQUEST]
 
-    All_Data_Valid = False
+    all_data_valid = False
 
     Virtual_URL = ""
     Requesting_URL = ""
@@ -22,6 +22,10 @@ class LogRecord:
     DayOfWeek = 0   # 0 = Monday
     TimeOnly = datetime.time()
     Request = ""
+    Type = ""
+    Type2 = ""
+    Section = ""
+    Name = ""
     Verb = "GET"
     Status = 200
     Bytes = -1
@@ -37,9 +41,9 @@ class LogRecord:
 
     def __init__(self, str_line):
         data = self.parse_apache_data_line(str_line)
-        if data != None:
+        if data is not None:
             self.set_values_from_data(data)
-            self.All_Data_Valid = True
+            self.all_data_valid = True
 
     def set_values_from_data(self, data):
         self.index = 0
@@ -52,6 +56,13 @@ class LogRecord:
         time_of_req = self.TimeOfRequest.time()
         self.TimeOnly = time_of_req.second + 60 * (time_of_req.minute + 60 * time_of_req.hour)
         self.Request = data[self.get_cur_index()]
+
+        url_details = get_url_details(self.Request)
+
+        self.type = url_details.type
+        self.type2 = url_details.type2
+        self.section = url_details.section
+        self.name = url_details.name
         self.Verb = get_verb_from_request(self.Request)
         self.Status = int(data[self.get_cur_index()])
 
@@ -79,6 +90,10 @@ class LogRecord:
             "DayOfWeek": self.DayOfWeek,
             self.TIME_OF_REQUEST: self.TimeOnly,
             "Request": self.Request,
+            "Type": self.type,
+            "Type2": self.type2,
+            "Section": self.section,
+            "Name": self.name,
             "Verb": self.Verb,
             "Status": self.Status,
             "Bytes": self.Bytes,
@@ -98,8 +113,8 @@ class LogRecord:
         self.index += 1
         return ii
 
-
-    def parse_apache_data_line(self, line):
+    @staticmethod
+    def parse_apache_data_line(line):
         """
             www.escapistmagazine.com 80.149.31.40 - Eagle Est1986 [24/Sep/2013:10:56:14 -0400] "GET /rss/videos/podcast/101-7908c74999845d359b932967635cd965.xml?uid=226565 HTTP/1.1" 200 227176 "-" "iTunes/11.1 (Macintosh; OS X 10.7.5) AppleWebKit/534.57.7" "- -" UkGoDgoAAGgAAFCvorsAAABM 2621440 1'
 
@@ -125,7 +140,7 @@ class LogRecord:
         """
         regex = '(\S*)\s(\S*) - (.*) \[(.*)\] "(.*)" (\d*) (\S*) "(.*?)" "(.*?)" "(.*?)" (\S*) (\S*) (\d*)'
         matches = re.match(regex, line)
-        if matches != None:
+        if matches is not None:
             return matches.groups()
         else:
             return None

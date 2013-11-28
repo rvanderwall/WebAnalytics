@@ -4,6 +4,8 @@ import re
 from datetime import timedelta, datetime
 from pytz import timezone
 import pytz
+import collections
+from urlparse import urlparse
 
 
 def get_verb_from_request(request):
@@ -88,3 +90,22 @@ def get_date_from_string_2(dateString, offset):
     logtime = datetime.strptime(dateString[:-6], fmt)
     logtime -= delta
     return logtime
+
+
+def get_url_details(request):
+    UrlDetail = collections.namedtuple('UrlDetail', 'type type2 section name')
+    o = urlparse(request)
+    path = o.path
+    try:
+        #regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>.*))?/(?P<name>.*$)", re.IGNORECASE)
+        regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
+        r = regex.search(path)
+    except:
+        print "Couldn't parse '" + request + "'"
+        return UrlDetail()
+
+    if r is not None:
+        return UrlDetail(r.group("type"), r.group("type2"), r.group("section"), r.group("name"))
+    else:
+        print "Couldn't parse '" + request + "'"
+        return UrlDetail(None, None, None, None)
