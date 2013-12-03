@@ -92,20 +92,29 @@ def get_date_from_string_2(dateString, offset):
     return logtime
 
 
+#regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>.*))?/(?P<name>.*$)", re.IGNORECASE)
+#regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
+regex = re.compile("/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
+
 def get_url_details(request):
     UrlDetail = collections.namedtuple('UrlDetail', 'type type2 section name')
-    o = urlparse(request)
-    path = o.path
-    try:
-        #regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>.*))?/(?P<name>.*$)", re.IGNORECASE)
-        regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
-        r = regex.search(path)
-    except:
-        print "Couldn't parse '" + request + "'"
-        return UrlDetail()
-
-    if r is not None:
-        return UrlDetail(r.group("type"), r.group("type2"), r.group("section"), r.group("name"))
-    else:
-        print "Couldn't parse '" + request + "'"
+    #o = urlparse(request)
+    #path = o.path
+    matches = re.match('GET (.*) HTTP/1.[01]', request)
+    if matches is None:
         return UrlDetail(None, None, None, None)
+    request_path = matches.groups()[0]
+    path = request_path.split('?')[0]
+    parts = path.split('/')
+
+    if len(parts) == 1:   # /
+        return UrlDetail(None, None, None, None)
+    if len(parts) == 2:   # /t
+        return UrlDetail(parts[1], None, None, None)
+    if len(parts) == 3:   # /t/u
+        return UrlDetail(parts[1], parts[2], None, None)
+    if len(parts) == 4:   # /t/u/v
+        return UrlDetail(parts[1], parts[2], None, parts[3])
+
+    return UrlDetail(parts[1], parts[2], parts[3], parts[4])
+

@@ -2,20 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d993d29-14f1-4886-9184-675ec479fd52" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SimpleStats.py" afterPath="$PROJECT_DIR$/SimpleStats.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/LogFileHelper.py" afterPath="$PROJECT_DIR$/LogFileHelper.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tests.py" afterPath="$PROJECT_DIR$/Tests.py" />
     </list>
     <ignored path="DigitalAlloy.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/App.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1382205115426" ignored="false" />
-    <file path="/Tests.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1386034030095" ignored="false" />
+    <file path="/Tests.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1386034143884" ignored="false" />
     <file path="/ImportApacheDataToMongo.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1382299890736" ignored="false" />
-    <file path="/fragment.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1382303768943" ignored="false" />
+    <file path="/fragment.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1386041453076" ignored="false" />
     <file path="/LogRecord.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1382412741225" ignored="false" />
     <file path="/LogRecordRepository.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1383192443298" ignored="false" />
     <file path="/ImportLogDataToDB.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1383195282012" ignored="false" />
     <file path="/SimpleStats.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1386033776717" ignored="false" />
-    <file path="/LogFileHelper.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1382413036510" ignored="false" />
+    <file path="/LogFileHelper.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1386042572819" ignored="false" />
     <file path="/CDNRecord.py" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1382412917020" ignored="false" />
     <file path="/Python Console" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1383187734144" ignored="false" />
     <file path="/Dummy.txt" changelist="1d993d29-14f1-4886-9184-675ec479fd52" time="1386032726544" ignored="false" />
@@ -41,7 +41,7 @@
       <file leaf-file-name="ImportLogDataToDB.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ImportLogDataToDB.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="29" column="0" selection-start="868" selection-end="868" vertical-scroll-proportion="0.0">
+            <state line="13" column="0" selection-start="286" selection-end="286" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -50,7 +50,7 @@
       <file leaf-file-name="LogRecord.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LogRecord.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="59" column="37" selection-start="1797" selection-end="1812" vertical-scroll-proportion="0.0">
+            <state line="45" column="0" selection-start="1076" selection-end="1076" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -68,8 +68,10 @@
       <file leaf-file-name="LogFileHelper.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/LogFileHelper.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="52" column="19" selection-start="1505" selection-end="1505" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="118" column="0" selection-start="3651" selection-end="3651" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#20#29#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -88,7 +90,16 @@
       <file leaf-file-name="Tests.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Tests.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="17" column="1" selection-start="355" selection-end="355" vertical-scroll-proportion="0.24170616">
+            <state line="15" column="16" selection-start="304" selection-end="304" vertical-scroll-proportion="0.3519669">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LogRecordRepository.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LogRecordRepository.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="16" column="0" selection-start="341" selection-end="341" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -98,7 +109,10 @@
         <entry file="file://$PROJECT_DIR$/SimpleStats.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="3" column="0" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0">
-              <folding />
+              <folding>
+                <marker date="1386033790472" expanded="true" signature="20:97" placeholder="import ..." />
+                <marker date="1386033790472" expanded="true" signature="136:2725" placeholder="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -124,12 +138,12 @@
         <option value="$PROJECT_DIR$/App.py" />
         <option value="/fragment.py" />
         <option value="$PROJECT_DIR$/ImportApacheDataToMongo.py" />
-        <option value="$PROJECT_DIR$/LogFileHelper.py" />
         <option value="$PROJECT_DIR$/LogRecord.py" />
         <option value="$PROJECT_DIR$/CDNRecord.py" />
         <option value="$PROJECT_DIR$/LogRecordRepository.py" />
         <option value="$PROJECT_DIR$/ImportLogDataToDB.py" />
         <option value="$PROJECT_DIR$/SimpleStats.py" />
+        <option value="$PROJECT_DIR$/LogFileHelper.py" />
         <option value="$PROJECT_DIR$/Tests.py" />
       </list>
     </option>
@@ -138,7 +152,7 @@
     <option name="x" value="30" />
     <option name="y" value="10" />
     <option name="width" value="1212" />
-    <option name="height" value="837" />
+    <option name="height" value="897" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -242,7 +256,7 @@
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="DigitalAlloy" />
+      <module name="DigitalAlloyAnalysis" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="" />
       <option name="PARAMETERS" value="" />
@@ -340,18 +354,18 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="30" y="10" width="1212" height="837" extended-state="0" />
+    <frame x="30" y="10" width="1212" height="897" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26173913" sideWeight="0.7155612" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40924656" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26173913" sideWeight="0.7162162" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40810812" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2844388" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2837838" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -421,7 +435,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="18" />
+      <option name="time" value="31" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -440,11 +454,6 @@
     <entry file="file://C:/WinPython-64bit-2.7.5.1/python-2.7.5.amd64/Lib/site-packages/pymongo/mongo_client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="351" column="0" selection-start="15535" selection-end="15535" vertical-scroll-proportion="0.19115734" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LogRecordRepository.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="0" selection-start="349" selection-end="349" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://C:/WinPython-64bit-2.7.5.1/python-2.7.5.amd64/Lib/site-packages/pymongo/database.py">
@@ -481,31 +490,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ImportLogDataToDB.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="868" selection-end="868" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/SimpleStats.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="3" column="0" selection-start="36" selection-end="36" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LogRecord.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="59" column="37" selection-start="1797" selection-end="1812" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/LogFileHelper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="52" column="19" selection-start="1505" selection-end="1505" vertical-scroll-proportion="0.0">
-          <folding />
+          <folding>
+            <marker date="1386033790472" expanded="true" signature="20:97" placeholder="import ..." />
+            <marker date="1386033790472" expanded="true" signature="136:2725" placeholder="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -518,9 +509,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/LogRecordRepository.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="0" selection-start="341" selection-end="341" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LogRecord.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="0" selection-start="1076" selection-end="1076" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ImportLogDataToDB.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="0" selection-start="286" selection-end="286" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LogFileHelper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="118" column="0" selection-start="3651" selection-end="3651" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#20#29#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Tests.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="1" selection-start="355" selection-end="355" vertical-scroll-proportion="0.24170616">
+        <state line="15" column="16" selection-start="304" selection-end="304" vertical-scroll-proportion="0.3519669">
           <folding />
         </state>
       </provider>

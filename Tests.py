@@ -13,7 +13,7 @@ MODE_VERIFY_ONLY = 0
 MODE_SPARCE = 1
 MODE_FULL = 2
 
-MODE = MODE_SPARCE
+MODE = MODE_FULL
 DATAPATH = "M:\MorningBeacon\DigitalAlloyData"
 #DATAPATH = "/media/analytics/workspace/projects/digitalalloy/data"
 APACHE_LOG = DATAPATH + "/escweek_sorted.log"
@@ -42,7 +42,7 @@ import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS)
 repo.ensure_indexes()
 get_simple_stats(repo.collection)
 
-repo = LogRecordRepository(CDN_COLLECTION_NAME)
+#repo = LogRecordRepository(CDN_COLLECTION_NAME)
 #import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
 #repo.ensure_indexes()
 #get_simple_stats(repo.collection)
