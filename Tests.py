@@ -9,31 +9,29 @@ import LogRecord
 
 print "PASS"
 
-USE_SMALL_DATA = True
+USE_SPARSE_DATA = True
+DATAPATH = "/media/analytics/workspace/projects/digitalalloy/data"
+APACHE_LOG = DATAPATH + "/escweek_sorted.log"
+CDN_LOG = DATAPATH + "/cdnweek_sorted.log"
 
-if USE_SMALL_DATA:
-    APACHE_LOG = "C:/Users/rlv/Desktop/MorningBeacon/escweek_sorted.log"
-    COLLECTION_NAME = "Digital_Alloy_Small"
-    CDN_LOG = "C:/Users/rlv/Desktop/MorningBeacon/cdnweek_sorted.log"
-    CDN_LOG = "C:/Users/rlv/Desktop/MorningBeacon/cdn_small.txt"
-    CDN_COLLECTION_NAME = "Digital_Alloy_CDN_Small"
-    USE_ROWS = 1000000
-    SKIP_ROWS = 1
-    # SKIP_ROWS = sys.maxint
+if USE_SPARSE_DATA:
+    COLLECTION_NAME = "DA_WebLog_Sparce"
+    CDN_COLLECTION_NAME = "DA_CDNLog_Sparce"
+    #USE_ROWS = 100000000
+    USE_ROWS = sys.maxint
+    SKIP_ROWS = 20  # Only insert every 1 in 20 rows
 else:
-    APACHE_LOG = "C:/Users/rlv/Desktop/MorningBeacon/escweek_sorted.log"
-    COLLECTION_NAME = "Digital_Alloy"
-    CDN_LOG = "C:/Users/rlv/Desktop/MorningBeacon/cdnweek.log"
-    CDN_COLLECTION_NAME = "Digital_Alloy_CDN"
+    COLLECTION_NAME = "DA_WebLog"
+    CDN_COLLECTION_NAME = "DA_CDNLog"
     USE_ROWS = sys.maxint
     SKIP_ROWS = sys.maxint  # Skip all, do only verification.
-    #SKIP_ROWS = 20  # Only insert every 1 in 20 rows
 
-
-#repo = LogRecordRepository(COLLECTION_NAME)
-#import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS)
-#get_simple_stats(repo.collection)
-
-repo = LogRecordRepository(CDN_COLLECTION_NAME)
-import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
+repo = LogRecordRepository(COLLECTION_NAME)
+import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS)
+repo.ensure_indexes()
 get_simple_stats(repo.collection)
+
+#repo = LogRecordRepository(CDN_COLLECTION_NAME)
+#import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
+#repo.ensure_indexes()
+#get_simple_stats(repo.collection)
