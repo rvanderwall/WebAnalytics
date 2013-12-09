@@ -6,9 +6,11 @@ import LogRecord
 
 class LogRecordRepository:
     collection = None
+    #host="127.0.0.1"
+    host="192.168.1.71"
 
     def __init__(self, collectionName):
-        self.client = pymongo.MongoClient()
+        self.client = pymongo.MongoClient(self.host)
         self.db = self.client.LogRecords
         self.collection = self.db[collectionName]
         #self.ensure_indexes()
