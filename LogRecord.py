@@ -80,7 +80,7 @@ class LogRecord:
             self.memoryUse = int(m)
         self.ProcessingTime = int(self.get_cur_index())
 
-    def toJSON(self):
+    def to_json(self):
         doc = {
             "URL": self.Virtual_URL,
             self.REQUESTING_URL: self.Requesting_URL,

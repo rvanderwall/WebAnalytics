@@ -2,7 +2,7 @@ __author__ = 'rlv'
 
 import sys
 from LogRecordRepository import LogRecordRepository
-from ImportLogDataToDB import import_log_data_to_repo, import_cdn_data_to_repo
+from ImportLogDataToDB import import_log_data_to_repo, import_cdn_data_to_repo, import_video_information_to_repo
 
 from SimpleStats import get_simple_stats
 import LogRecord
@@ -12,10 +12,11 @@ print "PASS"
 MODE_VERIFY_ONLY = 0
 MODE_SPARCE = 1
 MODE_FULL = 2
+MODE_CAPTURE_VIDEO_INFORMATION_ONLY = 3
 
-MODE = MODE_FULL
-DATAPATH = "M:\MorningBeacon\DigitalAlloyData"
-#DATAPATH = "/media/analytics/workspace/projects/digitalalloy/data"
+MODE = MODE_CAPTURE_VIDEO_INFORMATION_ONLY
+# DATAPATH = "M:\MorningBeacon\DigitalAlloyData"
+DATAPATH = "/media/analytics/workspace/projects/digitalalloy/data"
 APACHE_LOG = DATAPATH + "/escweek_sorted.log"
 CDN_LOG = DATAPATH + "/cdnweek_sorted.log"
 
@@ -34,6 +35,11 @@ elif MODE == MODE_FULL:
     CDN_COLLECTION_NAME = "DA_CDNLog"
     USE_ROWS = sys.maxint
     SKIP_ROWS = 1  # Don't actually Skip any
+elif MODE == MODE_CAPTURE_VIDEO_INFORMATION_ONLY:
+    COLLECTION_NAME = "DA_Video_Info"
+    repo = LogRecordRepository(COLLECTION_NAME)
+    import_video_information_to_repo(repo)
+    exit()
 else:
     print "Invalid mode"
 

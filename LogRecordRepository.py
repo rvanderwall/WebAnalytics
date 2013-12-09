@@ -19,7 +19,7 @@ class LogRecordRepository:
         self.collection.drop()
 
     def insertRecord(self, logRecord):
-        self.collection.insert(logRecord.toJSON())
+        self.collection.insert(logRecord.to_json())
 
 
     def ensure_indexes(self):

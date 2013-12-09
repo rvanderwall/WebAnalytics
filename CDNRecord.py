@@ -60,7 +60,7 @@ class CDNRecord:
         self.OS = get_OS_from_agent(self.UserAgent)
         self.Browser = get_browser_from_agent(self.UserAgent)
 
-    def toJSON(self):
+    def to_json(self):
         doc = {
             "URL": self.Virtual_URL,
             self.REQUESTING_URL: self.Requesting_URL,

@@ -96,6 +96,7 @@ def get_date_from_string_2(dateString, offset):
 #regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
 regex = re.compile("/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
 
+
 def get_url_details(request):
     UrlDetail = collections.namedtuple('UrlDetail', 'type type2 section name')
     #o = urlparse(request)
@@ -118,3 +119,13 @@ def get_url_details(request):
 
     return UrlDetail(parts[1], parts[2], parts[3], parts[4])
 
+
+regex = re.compile("<p>(?P<description>.*)</p>", re.IGNORECASE)
+
+
+def get_text_from_html(html):
+    matches = regex.search(html)
+    if matches is not None:
+        return matches.group("description")
+    else:
+        return ""
