@@ -5,7 +5,6 @@ from datetime import timedelta, datetime
 from pytz import timezone
 import pytz
 import collections
-from urlparse import urlparse
 
 
 def get_verb_from_request(request):
@@ -33,7 +32,7 @@ def get_browser_from_agent(agent):
     return agent
 
 
-def get_OS_from_agent(agent):
+def get_os_from_agent(agent):
     if re.search('macintosh', agent, re.I):
         return "Mac"
     if re.search('windows', agent, re.I):
@@ -62,69 +61,69 @@ def get_date_from_string(dateString, offset):
     return date
 
 
-def get_date_from_string_logtime(dateString):
+def get_date_from_string_log_time(date_string):
     fmt = "%d/%b/%Y:%H:%M:%S"
-    logtime = datetime.strptime(dateString[:-6], fmt)
-    logtimezone = timezone("Etc/GMT+4")
-    loc_logtime = logtimezone.localize(logtime)
-    utclogtime = loc_logtime.astimezone(pytz.utc)
-    return utclogtime
+    log_time = datetime.strptime(date_string[:-6], fmt)
+    log_timezone = timezone("Etc/GMT+4")
+    loc_log_time = log_timezone.localize(log_time)
+    utc_log_time = loc_log_time.astimezone(pytz.utc)
+    return utc_log_time
 
 
-def get_date_from_string_cdntime(dateString):
+def get_date_from_string_cdn_time(date_string):
     fmt = "%d/%b/%Y:%H:%M:%S"
-    logtime = datetime.strptime(dateString[:-6], fmt)
-    logtimezone = pytz.utc
-    utclogtime = logtimezone.localize(logtime)
-    return utclogtime
+    log_time = datetime.strptime(date_string[:-6], fmt)
+    log_timezone = pytz.utc
+    utc_log_time = log_timezone.localize(log_time)
+    return utc_log_time
 
 
-def get_date_from_string_2(dateString, offset):
+def get_date_from_string_2(date_string, offset):
     try:
-        offset = int(dateString[-5:])
-    except:
+        offset = int(date_string[-5:])
+    except Exception:
         print "Error"
 
     fmt = "%d/%b/%Y:%H:%M:%S"
     delta = timedelta(hours=offset / 100)
-    logtime = datetime.strptime(dateString[:-6], fmt)
-    logtime -= delta
-    return logtime
+    log_time = datetime.strptime(date_string[:-6], fmt)
+    log_time -= delta
+    return log_time
 
 
-#regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>.*))?/(?P<name>.*$)", re.IGNORECASE)
-#regex = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
-regex = re.compile("/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
+#regex_url = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>.*))?/(?P<name>.*$)", re.IGNORECASE)
+#regex_url = re.compile("(?:\w*)\s/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
+regex_url = re.compile("/(?P<type>\w*)/(?P<type2>\w*)(?:/(?P<section>[^ \s]*))?/(?P<name>[^ \s]*)", re.IGNORECASE)
 
 
 def get_url_details(request):
-    UrlDetail = collections.namedtuple('UrlDetail', 'type type2 section name')
+    url_detail = collections.namedtuple('url_detail', 'type type2 section name')
     #o = urlparse(request)
     #path = o.path
     matches = re.match('GET (.*) HTTP/1.[01]', request)
     if matches is None:
-        return UrlDetail(None, None, None, None)
+        return url_detail(None, None, None, None)
     request_path = matches.groups()[0]
     path = request_path.split('?')[0]
     parts = path.split('/')
 
     if len(parts) == 1:   # /
-        return UrlDetail(None, None, None, None)
+        return url_detail(None, None, None, None)
     if len(parts) == 2:   # /t
-        return UrlDetail(parts[1], None, None, None)
+        return url_detail(parts[1], None, None, None)
     if len(parts) == 3:   # /t/u
-        return UrlDetail(parts[1], parts[2], None, None)
+        return url_detail(parts[1], parts[2], None, None)
     if len(parts) == 4:   # /t/u/v
-        return UrlDetail(parts[1], parts[2], None, parts[3])
+        return url_detail(parts[1], parts[2], None, parts[3])
 
-    return UrlDetail(parts[1], parts[2], parts[3], parts[4])
+    return url_detail(parts[1], parts[2], parts[3], parts[4])
 
 
-regex = re.compile("<p>(?P<description>.*)</p>", re.IGNORECASE)
+regex_html = re.compile("<p>(?P<description>.*)</p>", re.IGNORECASE)
 
 
 def get_text_from_html(html):
-    matches = regex.search(html)
+    matches = regex_html.search(html)
     if matches is not None:
         return matches.group("description")
     else:

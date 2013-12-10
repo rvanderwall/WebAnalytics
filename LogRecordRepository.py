@@ -6,21 +6,20 @@ import LogRecord
 
 class LogRecordRepository:
     collection = None
-    #host="127.0.0.1"
-    host="192.168.1.71"
+    host = "127.0.0.1"
+    # host="192.168.1.71"
 
-    def __init__(self, collectionName):
+    def __init__(self, collection_name):
         self.client = pymongo.MongoClient(self.host)
         self.db = self.client.LogRecords
-        self.collection = self.db[collectionName]
+        self.collection = self.db[collection_name]
         #self.ensure_indexes()
 
-    def dropCollection(self):
+    def drop_collection(self):
         self.collection.drop()
 
-    def insertRecord(self, logRecord):
-        self.collection.insert(logRecord.to_json())
-
+    def insert_record(self, log_record):
+        self.collection.insert(log_record.to_json())
 
     def ensure_indexes(self):
         for field in LogRecord.LogRecord.indexable_fields:

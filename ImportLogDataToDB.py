@@ -1,65 +1,64 @@
-from LogFileHelper import get_text_from_html
-from VideoInfoRecord import VideoInfoRecord
-
 __author__ = 'rlv'
 
 import sys
 import urllib2
-import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
+
+from LogFileHelper import get_text_from_html
+from VideoInfoRecord import VideoInfoRecord
 from LogRecord import LogRecord
 from CDNRecord import CDNRecord
 
 
 def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
     f = open(log_file, 'r')
-    lineNum = 0
-    repo.dropCollection()
+    line_num = 0
+    repo.drop_collection()
     for line in f:
-        lineNum += 1
-        logRecord = LogRecord(line)
-        if logRecord.all_data_valid:
-            if lineNum % 100000 == 0:
-                print "PROCESSING LINE {0}".format(lineNum)
-            if lineNum % skip_rows == 0:
+        line_num += 1
+        log_record = LogRecord(line)
+        if log_record.all_data_valid:
+            if line_num % 100000 == 0:
+                print "PROCESSING LINE {0}".format(line_num)
+            if line_num % skip_rows == 0:
                 try:
-                    repo.insertRecord(logRecord)
+                    repo.insert_record(log_record)
                 except Exception:
-                    print "ERROR INSERTING LINE {0}".format(lineNum)
+                    print "ERROR INSERTING LINE {0}".format(line_num)
                     print line
         else:
-            print "ERROR in line {0}".format(lineNum)
-        if lineNum > max_rows:
+            print "ERROR in line {0}".format(line_num)
+        if line_num > max_rows:
             break
-    print "PROCESSED {0} LINES".format(lineNum)
+    print "PROCESSED {0} LINES".format(line_num)
 
 
 def import_cdn_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
     f = open(log_file, 'r')
-    lineNum = 0
-    repo.dropCollection()
+    line_num = 0
+    repo.drop_collection()
     for line in f:
-        lineNum += 1
-        cdnRecord = CDNRecord(line)
-        if cdnRecord.All_Data_Valid:
-            if lineNum % 100000 == 0:
-                print "PROCESSING LINE {0}".format(lineNum)
-            if lineNum % skip_rows == 0:
+        line_num += 1
+        cdn_record = CDNRecord(line)
+        if cdn_record.All_Data_Valid:
+            if line_num % 100000 == 0:
+                print "PROCESSING LINE {0}".format(line_num)
+            if line_num % skip_rows == 0:
                 try:
-                    repo.insertRecord(cdnRecord)
+                    repo.insert_record(cdn_record)
                 except Exception:
-                    print "ERROR INSERTING LINE {0}".format(lineNum)
+                    print "ERROR INSERTING LINE {0}".format(line_num)
                     print line
         else:
-            print "ERROR PARSING LINE {0}".format(lineNum)
-        if lineNum > max_rows:
+            print "ERROR PARSING LINE {0}".format(line_num)
+        if line_num > max_rows:
             break
-    print "PROCESSED {0} LINES".format(lineNum)
+    print "PROCESSED {0} LINES".format(line_num)
 
 
 def import_video_information_to_repo(repo):
-    repo.dropCollection()
+    repo.drop_collection()
     record_num = 0
     for i in range(1, 203):
         response = urllib2.urlopen("http://www.escapistmagazine.com/rss/videos/list/" + str(i) + ".xml")
@@ -81,7 +80,7 @@ def import_video_information_to_repo(repo):
                 record_num += 1
 
                 try:
-                    repo.insertRecord(record)
+                    repo.insert_record(record)
                 except Exception:
                     print "ERROR INSERTING LINE {0}".format(record_num)
                     print record.title, record.link, record.description, record.pubdate
@@ -89,6 +88,3 @@ def import_video_information_to_repo(repo):
                 print record.title, record.link, record.description, record.pubdate
 
     print "PROCESSED {0} VIDEO DESCRIPTIONS".format(record_num)
-
-    return None
-

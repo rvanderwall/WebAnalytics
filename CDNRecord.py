@@ -2,7 +2,7 @@ __author__ = 'rlv'
 
 import datetime
 import re
-from LogFileHelper import get_browser_from_agent, get_OS_from_agent, get_verb_from_request, get_date_from_string_cdntime
+from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_cdn_time
 
 
 class CDNRecord:
@@ -44,7 +44,7 @@ class CDNRecord:
         #self.RemoteLogName = data[self.getCurIndex()] # always '-'
         self.User = data[self.get_cur_index()]
         #self.TimeOfRequest = get_date_from_string(data[self.get_cur_index()], "+0000")
-        self.TimeOfRequest = get_date_from_string_cdntime(data[self.get_cur_index()])
+        self.TimeOfRequest = get_date_from_string_cdn_time(data[self.get_cur_index()])
         self.DayOfWeek = self.TimeOfRequest.weekday()
         time_of_req = self.TimeOfRequest.time()
         self.TimeOnly = time_of_req.second + 60 * (time_of_req.minute + 60 * time_of_req.hour)
@@ -57,7 +57,7 @@ class CDNRecord:
             self.Bytes = int(b)
         self.Referrer = data[self.get_cur_index()]
         self.UserAgent = data[self.get_cur_index()]
-        self.OS = get_OS_from_agent(self.UserAgent)
+        self.OS = get_os_from_agent(self.UserAgent)
         self.Browser = get_browser_from_agent(self.UserAgent)
 
     def to_json(self):
