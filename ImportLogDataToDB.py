@@ -41,7 +41,7 @@ def import_cdn_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
     for line in f:
         line_num += 1
         cdn_record = CDNRecord(line)
-        if cdn_record.All_Data_Valid:
+        if cdn_record.all_data_valid:
             if line_num % 100000 == 0:
                 print "PROCESSING LINE {0}".format(line_num)
             if line_num % skip_rows == 0:

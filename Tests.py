@@ -12,8 +12,9 @@ MODE_VERIFY_ONLY = 0
 MODE_SPARSE = 1
 MODE_FULL = 2
 MODE_CAPTURE_VIDEO_INFORMATION_ONLY = 3
+MODE_TEST = 4
 
-MODE = MODE_CAPTURE_VIDEO_INFORMATION_ONLY
+MODE = MODE_TEST
 # DATA_PATH = "M:\MorningBeacon\DigitalAlloyData"
 DATA_PATH = "/media/analytics/workspace/projects/digitalalloy/data"
 APACHE_LOG = DATA_PATH + "/escweek_sorted.log"
@@ -39,6 +40,11 @@ elif MODE == MODE_CAPTURE_VIDEO_INFORMATION_ONLY:
     repo = LogRecordRepository(COLLECTION_NAME)
     import_video_information_to_repo(repo)
     exit()
+elif MODE == MODE_TEST:
+    COLLECTION_NAME = "DA_WebLog_Test"
+    CDN_COLLECTION_NAME = "DA_CDNLog_Test"
+    USE_ROWS = sys.maxint
+    SKIP_ROWS = sys.maxint
 else:
     print "Invalid mode"
 

@@ -10,33 +10,33 @@ class LogRecord:
     DATETIME_OF_REQUEST = "TimeOfRequest"
     TIME_OF_REQUEST = "TimeOnlyOfRequest"
 
-    indexable_fields = [REQUESTING_URL, DATETIME_OF_REQUEST, TIME_OF_REQUEST]
+    INDEXABLE_FIELDS = [REQUESTING_URL, DATETIME_OF_REQUEST, TIME_OF_REQUEST]
 
     all_data_valid = False
 
-    Virtual_URL = ""
-    Requesting_URL = ""
+    virtual_url = ""
+    requesting_url = ""
     RemoteLogName = "-"
-    User = ""
-    TimeOfRequest = datetime.datetime.utcnow()
+    user = ""
+    time_of_request = datetime.datetime.utcnow()
     DayOfWeek = 0   # 0 = Monday
-    TimeOnly = datetime.time()
-    Request = ""
-    Type = ""
-    Type2 = ""
-    Section = ""
-    Name = ""
-    Verb = "GET"
-    Status = 200
-    Bytes = -1
-    Referrer = ""
-    UserAgent = ""
-    OS = ""
-    Browser = ""
-    Mozilla_parms = ""
-    UniqueId = ""
-    memoryUse = -1
-    ProcessingTime = 0
+    time_only = datetime.time()
+    request = ""
+    type = ""
+    type2 = ""
+    section = ""
+    name = ""
+    verb = "GET"
+    status = 200
+    bytes = -1
+    referrer = ""
+    user_agent = ""
+    os = ""
+    browser = ""
+    mozilla_parms = ""
+    unique_id = ""
+    memory_use = -1
+    processing_time = 0
     index = 0
 
     def __init__(self, str_line):
@@ -47,64 +47,64 @@ class LogRecord:
 
     def set_values_from_data(self, data):
         self.index = 0
-        self.Virtual_URL = data[self.get_cur_index()]
-        self.Requesting_URL = data[self.get_cur_index()]
+        self.virtual_url = data[self.get_cur_index()]
+        self.requesting_url = data[self.get_cur_index()]
         #self.RemoteLogName = data[self.getCurIndex()] # always '-'
-        self.User = data[self.get_cur_index()]
+        self.user = data[self.get_cur_index()]
         #self.TimeOfRequest = get_date_from_string(data[self.get_cur_index()], "-0400")
-        self.TimeOfRequest = get_date_from_string_log_time(data[self.get_cur_index()])
-        time_of_req = self.TimeOfRequest.time()
-        self.TimeOnly = time_of_req.second + 60 * (time_of_req.minute + 60 * time_of_req.hour)
-        self.Request = data[self.get_cur_index()]
+        self.time_of_request = get_date_from_string_log_time(data[self.get_cur_index()])
+        time_of_req = self.time_of_request.time()
+        self.time_only = time_of_req.second + 60 * (time_of_req.minute + 60 * time_of_req.hour)
+        self.request = data[self.get_cur_index()]
 
-        url_details = get_url_details(self.Request)
+        url_details = get_url_details(self.request)
 
         self.type = url_details.type
         self.type2 = url_details.type2
         self.section = url_details.section
         self.name = url_details.name
-        self.Verb = get_verb_from_request(self.Request)
-        self.Status = int(data[self.get_cur_index()])
+        self.verb = get_verb_from_request(self.request)
+        self.status = int(data[self.get_cur_index()])
 
         b = data[self.get_cur_index()]
         if b != '-':
-            self.Bytes = int(b)
-        self.Referrer = data[self.get_cur_index()]
-        self.UserAgent = data[self.get_cur_index()]
-        self.OS = get_os_from_agent(self.UserAgent)
-        self.Browser = get_browser_from_agent(self.UserAgent)
-        self.Mozilla_parms = data[self.get_cur_index()]
-        self.UniqueId = data[self.get_cur_index()]
+            self.bytes = int(b)
+        self.referrer = data[self.get_cur_index()]
+        self.user_agent = data[self.get_cur_index()]
+        self.os = get_os_from_agent(self.user_agent)
+        self.browser = get_browser_from_agent(self.user_agent)
+        self.mozilla_parms = data[self.get_cur_index()]
+        self.unique_id = data[self.get_cur_index()]
         m = data[self.get_cur_index()]
         if m != '-':
-            self.memoryUse = int(m)
-        self.ProcessingTime = int(self.get_cur_index())
+            self.memory_use = int(m)
+        self.processing_time = int(self.get_cur_index())
 
     def to_json(self):
         doc = {
-            "URL": self.Virtual_URL,
-            self.REQUESTING_URL: self.Requesting_URL,
+            "URL": self.virtual_url,
+            self.REQUESTING_URL: self.requesting_url,
             "RemoteLogName": self.RemoteLogName,
-            "RemoteUser": self.User,
-            self.DATETIME_OF_REQUEST: self.TimeOfRequest,
+            "RemoteUser": self.user,
+            self.DATETIME_OF_REQUEST: self.time_of_request,
             "DayOfWeek": self.DayOfWeek,
-            self.TIME_OF_REQUEST: self.TimeOnly,
-            "Request": self.Request,
+            self.TIME_OF_REQUEST: self.time_only,
+            "Request": self.request,
             "Type": self.type,
             "Type2": self.type2,
             "Section": self.section,
             "Name": self.name,
-            "Verb": self.Verb,
-            "Status": self.Status,
-            "Bytes": self.Bytes,
-            "Referrer": self.Referrer,
-            "UserAgent": self.UserAgent,
-            "OS": self.OS,
-            "Browser": self.Browser,
-            "MozillaParameters": self.Mozilla_parms,
-            "UniqueId": self.UniqueId,
-            "MemoryUse": self.memoryUse,
-            "ProcessingTime": self.ProcessingTime
+            "Verb": self.verb,
+            "Status": self.status,
+            "Bytes": self.bytes,
+            "Referrer": self.referrer,
+            "UserAgent": self.user_agent,
+            "OS": self.os,
+            "Browser": self.browser,
+            "MozillaParameters": self.mozilla_parms,
+            "UniqueId": self.unique_id,
+            "MemoryUse": self.memory_use,
+            "ProcessingTime": self.processing_time
         }
         return doc
 

@@ -5,7 +5,6 @@ import LogRecord
 
 
 class LogRecordRepository:
-    collection = None
     host = "127.0.0.1"
     # host="192.168.1.71"
 
@@ -22,7 +21,7 @@ class LogRecordRepository:
         self.collection.insert(log_record.to_json())
 
     def ensure_indexes(self):
-        for field in LogRecord.LogRecord.indexable_fields:
+        for field in LogRecord.LogRecord.INDEXABLE_FIELDS:
             self.collection.create_index(field)
 
 
