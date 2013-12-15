@@ -149,15 +149,16 @@ def get_title_and_description(video_info):
 
 
 regex_title = re.compile(ur"\d+-(?P<title>\b.+\b)", re.IGNORECASE | re.UNICODE)
+regex_title_replace = re.compile(ur"['\-().,: ]", re.IGNORECASE | re.UNICODE)
 
 
 def add_description(log_record, descriptions):
     matches = regex_title.search(log_record.name)
     if matches is not None:
-        fixed_title = re.sub(ur"['\-().,: ]", "", matches.group("title"), 0, re.UNICODE).lower()
+        fixed_title = re.sub(regex_title_replace, "", matches.group("title"), 0).lower()
         try:
             log_record.fixed_name = fixed_title
             log_record.description = descriptions[unicode(fixed_title)]
         except KeyError:
-            print "Cannot find the description for the video --> {0}".format(log_record.name)
+            # print "Cannot find the description for the video --> {0}".format(log_record.name)
     pass
