@@ -160,5 +160,5 @@ def add_description(log_record, descriptions):
             log_record.fixed_name = fixed_title
             log_record.description = descriptions[unicode(fixed_title)]
         except KeyError:
-            # print "Cannot find the description for the video --> {0}".format(log_record.name)
-    pass
+            #print "Cannot find the description for the video --> {0}".format(log_record.name)
+            pass
