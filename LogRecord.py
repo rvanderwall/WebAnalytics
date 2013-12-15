@@ -26,6 +26,8 @@ class LogRecord:
     type2 = ""
     section = ""
     name = ""
+    fixed_name = ""
+    description = ""
     verb = "GET"
     status = 200
     bytes = -1
@@ -94,6 +96,8 @@ class LogRecord:
             "Type2": self.type2,
             "Section": self.section,
             "Name": self.name,
+            "FixedName": self.fixed_name,
+            "Description": self.description,
             "Verb": self.verb,
             "Status": self.status,
             "Bytes": self.bytes,

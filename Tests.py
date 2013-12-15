@@ -1,9 +1,8 @@
-from VideoRecordRepository import VideoRecordRepository
-
 __author__ = 'rlv'
 
 import sys
 from LogRecordRepository import LogRecordRepository
+from VideoRecordRepository import VideoRecordRepository
 from ImportLogDataToDB import import_log_data_to_repo, import_video_information_to_repo
 
 from SimpleStats import get_simple_stats
@@ -47,10 +46,10 @@ elif MODE == MODE_TEST:
 else:
     print "Invalid mode"
 
-repo = LogRecordRepository(COLLECTION_NAME)
-import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS)
-repo.ensure_indexes()
-get_simple_stats(repo.collection)
+# repo = LogRecordRepository(COLLECTION_NAME)
+# import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS)
+# repo.ensure_indexes()
+# get_simple_stats(repo.collection)
 
 #repo = LogRecordRepository(CDN_COLLECTION_NAME)
 #import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
@@ -64,12 +63,17 @@ if IMPORT_VIDEO_INFORMATION:
     repo.ensure_indexes()
 
 if CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS:
-    COLLECTION_NAME = "DA_WebLog_Videos"
+    VIDEO_INFO_COLLECTION_NAME = "DA_Video_Info"
+    VIDEO_WEB_LOG_COLLECTION_NAME = "DA_WebLog_Videos"
     USE_ROWS = sys.maxint
     SKIP_ROWS = 1  # Don't actually Skip any
 
-    repo = LogRecordRepository(COLLECTION_NAME)
-    import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, only_videos=True)
-    repo.ensure_indexes()
+    video_info_repo = VideoRecordRepository(VIDEO_INFO_COLLECTION_NAME)
+    descriptions = video_info_repo.get_descriptions()
+
+    web_log_repo = LogRecordRepository(VIDEO_WEB_LOG_COLLECTION_NAME)
+    import_log_data_to_repo(web_log_repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, only_videos=True,
+                            descriptions=descriptions)
+    # web_log_repo.ensure_indexes()
 
 

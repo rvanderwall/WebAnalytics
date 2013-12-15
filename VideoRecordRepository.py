@@ -1,3 +1,6 @@
+import collections
+import re
+from LogFileHelper import get_title_and_description
 import config
 
 __author__ = 'meted'
@@ -22,3 +25,13 @@ class VideoRecordRepository:
     def ensure_indexes(self):
         for field in VideoInfoRecord.VideoInfoRecord.INDEXABLE_FIELDS:
             self.collection.create_index(field)
+
+    def get_descriptions(self):
+        descriptions = {}
+        for video_info in self.collection.find():
+            title, description = get_title_and_description(video_info)
+            descriptions[title] = description
+
+        ordered_descriptions = collections.OrderedDict(sorted(descriptions.items()))
+        # for k, v in ordered_descriptions.iteritems(): print k, v
+        return ordered_descriptions

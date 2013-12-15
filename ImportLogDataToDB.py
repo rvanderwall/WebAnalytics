@@ -5,13 +5,13 @@ import urllib2
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
-from LogFileHelper import get_text_from_html, check_url_for_video
+from LogFileHelper import get_text_from_html, check_url_for_video, add_description
 from VideoInfoRecord import VideoInfoRecord
 from LogRecord import LogRecord
 from CDNRecord import CDNRecord
 
 
-def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint, only_videos=False):
+def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint, only_videos=False, descriptions=None):
     f = open(log_file, 'r')
     line_num = 0
     repo.drop_collection()
@@ -22,13 +22,20 @@ def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint, on
             if line_num % 100000 == 0:
                 print "PROCESSING LINE {0}".format(line_num)
             if line_num % skip_rows == 0:
-                if only_videos and not check_url_for_video(log_record):
-                    continue
-                try:
-                    repo.insert_record(log_record)
-                except Exception:
-                    print "ERROR INSERTING LINE {0}".format(line_num)
-                    print line
+                if only_videos:
+                    if descriptions is not None and check_url_for_video(log_record):
+                        add_description(log_record, descriptions)
+                        try:
+                            repo.insert_record(log_record)
+                        except Exception:
+                            print "ERROR INSERTING LINE {0}".format(line_num)
+                            print line
+                else:
+                    try:
+                        repo.insert_record(log_record)
+                    except Exception:
+                        print "ERROR INSERTING LINE {0}".format(line_num)
+                        print line
         else:
             print "ERROR in line {0}".format(line_num)
         if line_num > max_rows:
