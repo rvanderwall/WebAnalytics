@@ -128,3 +128,15 @@ def get_text_from_html(html):
         return matches.group("description")
     else:
         return ""
+
+
+regex_video = re.compile("(?P<videos>^GET /videos/view/\S+/\S+$|^GET /videos/view/\S+/\S+\s.+$)", re.IGNORECASE)
+
+
+def check_url_for_video(log_record):
+    url = log_record.request
+    matches = regex_video.search(url)
+    if matches is None:
+        return False
+
+    return True

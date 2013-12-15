@@ -2,6 +2,9 @@ __author__ = 'meted'
 
 
 class VideoInfoRecord:
+    PUB_DATE = "Pubdate"
+    INDEXABLE_FIELDS = [PUB_DATE]
+
     channel = ""
     title = ""
     link = ""
@@ -17,6 +20,6 @@ class VideoInfoRecord:
             "Title": self.title,
             "link": self.link,
             "Description": self.description,
-            "Pubdate": self.pubdate
+            self.PUB_DATE: self.pubdate
         }
         return doc

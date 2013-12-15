@@ -1,3 +1,5 @@
+from VideoRecordRepository import VideoRecordRepository
+
 __author__ = 'rlv'
 
 import sys
@@ -8,11 +10,13 @@ from SimpleStats import get_simple_stats
 
 print "PASS"
 
+IMPORT_VIDEO_INFORMATION = False
+CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS = True
+
 MODE_VERIFY_ONLY = 0
 MODE_SPARSE = 1
 MODE_FULL = 2
-MODE_CAPTURE_VIDEO_INFORMATION_ONLY = 3
-MODE_TEST = 4
+MODE_TEST = 3
 
 MODE = MODE_TEST
 # DATA_PATH = "M:\MorningBeacon\DigitalAlloyData"
@@ -35,11 +39,6 @@ elif MODE == MODE_FULL:
     CDN_COLLECTION_NAME = "DA_CDNLog"
     USE_ROWS = sys.maxint
     SKIP_ROWS = 1  # Don't actually Skip any
-elif MODE == MODE_CAPTURE_VIDEO_INFORMATION_ONLY:
-    COLLECTION_NAME = "DA_Video_Info"
-    repo = LogRecordRepository(COLLECTION_NAME)
-    import_video_information_to_repo(repo)
-    exit()
 elif MODE == MODE_TEST:
     COLLECTION_NAME = "DA_WebLog_Test"
     CDN_COLLECTION_NAME = "DA_CDNLog_Test"
@@ -57,4 +56,20 @@ get_simple_stats(repo.collection)
 #import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
 #repo.ensure_indexes()
 #get_simple_stats(repo.collection)
+
+if IMPORT_VIDEO_INFORMATION:
+    COLLECTION_NAME = "DA_Video_Info"
+    repo = VideoRecordRepository(COLLECTION_NAME)
+    import_video_information_to_repo(repo)
+    repo.ensure_indexes()
+
+if CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS:
+    COLLECTION_NAME = "DA_WebLog_Videos"
+    USE_ROWS = sys.maxint
+    SKIP_ROWS = 1  # Don't actually Skip any
+
+    repo = LogRecordRepository(COLLECTION_NAME)
+    import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, only_videos=True)
+    repo.ensure_indexes()
+
 

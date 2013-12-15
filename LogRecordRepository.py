@@ -1,3 +1,5 @@
+import config
+
 __author__ = 'rlv'
 
 import pymongo
@@ -5,11 +7,8 @@ import LogRecord
 
 
 class LogRecordRepository:
-    host = "127.0.0.1"
-    # host="192.168.1.71"
-
     def __init__(self, collection_name):
-        self.client = pymongo.MongoClient(self.host)
+        self.client = pymongo.MongoClient(config.host)
         self.db = self.client.LogRecords
         self.collection = self.db[collection_name]
         #self.ensure_indexes()
@@ -26,4 +25,3 @@ class LogRecordRepository:
 
 
 # bson.errors.InvalidStringData: strings in documents must be valid UTF-8: 'Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_3 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Mobile/10B329 [FBAN/FBIOS;FBAV/6.4;FBBV/290891;FBDV/iPhone4,1;FBMD/iPhone;FBSN/iPhone OS;FBSV/6.1.3;FBSS/2; FBCR/OrangeEspa\xf1a;FBID/phone;FBLC/es_ES;FBOP/1]'
-

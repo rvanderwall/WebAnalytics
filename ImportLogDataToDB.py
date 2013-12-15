@@ -5,13 +5,13 @@ import urllib2
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
-from LogFileHelper import get_text_from_html
+from LogFileHelper import get_text_from_html, check_url_for_video
 from VideoInfoRecord import VideoInfoRecord
 from LogRecord import LogRecord
 from CDNRecord import CDNRecord
 
 
-def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
+def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint, only_videos=False):
     f = open(log_file, 'r')
     line_num = 0
     repo.drop_collection()
@@ -22,6 +22,8 @@ def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
             if line_num % 100000 == 0:
                 print "PROCESSING LINE {0}".format(line_num)
             if line_num % skip_rows == 0:
+                if only_videos and not check_url_for_video(log_record):
+                    continue
                 try:
                     repo.insert_record(log_record)
                 except Exception:
@@ -88,3 +90,4 @@ def import_video_information_to_repo(repo):
                 print record.title, record.link, record.description, record.pubdate
 
     print "PROCESSED {0} VIDEO DESCRIPTIONS".format(record_num)
+
