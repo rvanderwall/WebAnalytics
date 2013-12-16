@@ -3,14 +3,11 @@ __author__ = 'rlv'
 import datetime
 import re
 from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_log_time, get_url_details
-
+import FieldNames as fn
 
 class LogRecord:
-    REQUESTING_URL = "RequestingUrl"
-    DATETIME_OF_REQUEST = "TimeOfRequest"
-    TIME_OF_REQUEST = "TimeOnlyOfRequest"
 
-    INDEXABLE_FIELDS = [REQUESTING_URL, DATETIME_OF_REQUEST, TIME_OF_REQUEST]
+    INDEXABLE_FIELDS = [fn.REQUESTING_URL,fn.DATETIME_OF_REQUEST, fn.TIME_OF_REQUEST]
 
     all_data_valid = False
 
@@ -28,8 +25,8 @@ class LogRecord:
     name = ""
     fixed_name = ""
     description = ""
-    verb = "GET"
-    status = 200
+    verb = ""
+    status = 0
     bytes = -1
     referrer = ""
     user_agent = ""
@@ -39,7 +36,6 @@ class LogRecord:
     unique_id = ""
     memory_use = -1
     processing_time = 0
-    index = 0
 
     def __init__(self, str_line):
         data = self.parse_apache_data_line(str_line)
@@ -47,75 +43,74 @@ class LogRecord:
             self.set_values_from_data(data)
             self.all_data_valid = True
 
-    def set_values_from_data(self, data):
-        self.index = 0
-        self.virtual_url = data[self.get_cur_index()]
-        self.requesting_url = data[self.get_cur_index()]
+    def set_values_from_data(self, raw_data):
+        self.virtual_url = raw_data[fn.URL]
+        self.requesting_url = raw_data[fn.REQUESTING_URL]
         #self.RemoteLogName = data[self.getCurIndex()] # always '-'
-        self.user = data[self.get_cur_index()]
-        #self.TimeOfRequest = get_date_from_string(data[self.get_cur_index()], "-0400")
-        self.time_of_request = get_date_from_string_log_time(data[self.get_cur_index()])
+        self.user = raw_data[fn.REMOTE_USER]
+
+        self.time_of_request = get_date_from_string_log_time(raw_data[fn.DATETIME_OF_REQUEST])
+        self.day_of_week = self.time_of_request.weekday()
         time_of_req = self.time_of_request.time()
         self.time_only = time_of_req.second + 60 * (time_of_req.minute + 60 * time_of_req.hour)
-        self.request = data[self.get_cur_index()]
+
+        self.request = raw_data[fn.REQUEST]
+        self.verb = get_verb_from_request(self.request)
+        self.status = int(raw_data[fn.HTTP_STATUS])
 
         url_details = get_url_details(self.request)
-
         self.type = url_details.type
         self.type2 = url_details.type2
         self.section = url_details.section
         self.name = url_details.name
-        self.verb = get_verb_from_request(self.request)
-        self.status = int(data[self.get_cur_index()])
 
-        b = data[self.get_cur_index()]
+        b = raw_data[fn.BYTES_SENT]
         if b != '-':
             self.bytes = int(b)
-        self.referrer = data[self.get_cur_index()]
-        self.user_agent = data[self.get_cur_index()]
+
+        self.referrer = raw_data[fn.REFERRER]
+        self.user_agent = raw_data[fn.USER_AGENT]
         self.os = get_os_from_agent(self.user_agent)
         self.browser = get_browser_from_agent(self.user_agent)
-        self.mozilla_parms = data[self.get_cur_index()]
-        self.unique_id = data[self.get_cur_index()]
-        m = data[self.get_cur_index()]
+
+        self.mozilla_parms = raw_data[fn.MOZILLA_PARAMS]
+        self.unique_id = raw_data[fn.UNIQUE_ID]
+
+        m = raw_data[fn.MEMORY_USE]
         if m != '-':
             self.memory_use = int(m)
-        self.processing_time = int(self.get_cur_index())
+        self.processing_time = int(raw_data[fn.PROCESSING_TIME])
 
     def to_json(self):
         doc = {
-            "URL": self.virtual_url,
-            self.REQUESTING_URL: self.requesting_url,
-            "RemoteLogName": self.RemoteLogName,
-            "RemoteUser": self.user,
-            self.DATETIME_OF_REQUEST: self.time_of_request,
-            "DayOfWeek": self.DayOfWeek,
-            self.TIME_OF_REQUEST: self.time_only,
-            "Request": self.request,
-            "Type": self.type,
-            "Type2": self.type2,
-            "Section": self.section,
-            "Name": self.name,
-            "FixedName": self.fixed_name,
-            "Description": self.description,
-            "Verb": self.verb,
-            "Status": self.status,
-            "Bytes": self.bytes,
-            "Referrer": self.referrer,
-            "UserAgent": self.user_agent,
-            "OS": self.os,
-            "Browser": self.browser,
-            "MozillaParameters": self.mozilla_parms,
-            "UniqueId": self.unique_id,
-            "MemoryUse": self.memory_use,
-            "ProcessingTime": self.processing_time
+            fn.URL: self.virtual_url,
+            fn.REQUESTING_URL: self.requesting_url,
+            fn.REMOTE_LOG_NAME: self.RemoteLogName,
+            fn.REMOTE_USER: self.user,
+            fn.DATETIME_OF_REQUEST: self.time_of_request,
+            fn.DAY_OF_WEEK: self.DayOfWeek,
+            fn.TIME_OF_REQUEST: self.time_only,
+            fn.REQUEST: self.request,
+            fn.DATA_TYPE: self.type,
+            fn.DATA_SUBTYPE: self.type2,
+            fn.DATA_SECTION: self.section,
+            fn.DATA_NAME: self.name,
+            fn.DATA_FIXED_NAME: self.fixed_name,
+            fn.DATA_DESCRIPTION: self.description,
+            fn.HTTP_VERB: self.verb,
+            fn.HTTP_STATUS: self.status,
+            fn.BYTES_SENT: self.bytes,
+            fn.REFERRER: self.referrer,
+            fn.USER_AGENT: self.user_agent,
+            fn.USER_OS: self.os,
+            fn.USER_BROWSER: self.browser,
+            fn.MOZILLA_PARAMS: self.mozilla_parms,
+            fn.UNIQUE_ID: self.unique_id,
+            fn.MEMORY_USE: self.memory_use,
+            fn.PROCESSING_TIME: self.processing_time
         }
         return doc
 
-    def get_cur_index(self):
-        ii = self.index
-        self.index += 1
-        return ii
 
     @staticmethod
     def parse_apache_data_line(line):
@@ -144,8 +139,22 @@ class LogRecord:
         """
         regex = '(\S*)\s(\S*) - (.*) \[(.*)\] "(.*)" (\d*) (\S*) "(.*?)" "(.*?)" "(.*?)" (\S*) (\S*) (\d*)'
         matches = re.match(regex, line)
-        if matches is not None:
-            return matches.groups()
-        else:
+        if matches is None:
             return None
 
+        groups = matches.groups()
+        raw_data = {}
+        raw_data[fn.URL] = groups[0]
+        raw_data[fn.REQUESTING_URL] = groups[1]
+        raw_data[fn.REMOTE_USER] = groups[2]
+        raw_data[fn.DATETIME_OF_REQUEST] = groups[3]
+        raw_data[fn.REQUEST] = groups[4]
+        raw_data[fn.HTTP_STATUS] = groups[5]
+        raw_data[fn.BYTES_SENT] = groups[6]
+        raw_data[fn.REFERRER] = groups[7]
+        raw_data[fn.USER_AGENT] = groups[8]
+        raw_data[fn.MOZILLA_PARAMS] = groups[9]
+        raw_data[fn.UNIQUE_ID] = groups[10]
+        raw_data[fn.MEMORY_USE] = groups[11]
+        raw_data[fn.PROCESSING_TIME] = groups[12]
+        return raw_data

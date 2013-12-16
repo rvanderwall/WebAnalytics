@@ -1,43 +1,39 @@
 __author__ = 'rlv'
 
 import datetime
-import numpy as np
-import re
+import FieldNames as fn
+from SimpleStats import get_simple_stats
+from Repositories import LogRecordRepository as lr
 
-import matplotlib.pyplot as plt
-from LogRecordRepository import LogRecordRepository
+dateString = '2013-09-21T08:00:00Z'
+dateString = '2013-09-22T00:00:00Z'
+d1 = datetime.datetime.strptime(dateString, "%Y-%m-%dT%H:%M:%SZ")
 
 
-def stats(logCollection):
-    dateString = '2013-09-21T08:00:00Z'
-    d1 = datetime.datetime.strptime(dateString, "%Y-%m-%dT%H:%M:%SZ")
-    resp = logCollection.aggregate([{"$match" : {"TimeOfRequest" : { "$lt" : d1}}},
-                                    {"$project" : {"RequestingUrl" : 1}},
-                                    {"$group": {"_id": "$RequestingUrl", "count": {"$sum": 1}}}])
-        # resp = logCollection.aggregate([{"$project": {"RequestingUrl": 1}},
-        #                                 {"$group": {"_id": "$RequestingUrl"}}])["result"]
+# Get list of unique URLs for dates before d1, then show the users for those URLs
+def user_stats(logCollection):
+    resp = logCollection.aggregate([{"$match" : {fn.DATETIME_OF_REQUEST : { "$lt" : d1}}},
+                                    {"$project" : {fn.REQUESTING_URL : 1}},
+                                    {"$group": {"_id": "$" + fn.REQUESTING_URL, "count": {"$sum": 1}}}])
+    print "Unique requesting IPs for dates before " + str(d1)
     print len(resp["result"])
     for r in resp["result"]:
         requestingURL = r["_id"]
-        show_users_for_URL(logCollection, requestingURL)
+        show_users_for_URL(logCollection, requestingURL, d1)
 
-# Show requests for URL, only for Sept 21.
-#requestingURL = "199.195.144.74"
+
 def show_request_for_URL(logCollection, requestingURL):
-    dateString = '2013-09-22T00:00:00Z'
-    d1 = datetime.datetime.strptime(dateString, "%Y-%m-%dT%H:%M:%SZ")
-    resp = logCollection.find({"RequestingUrl": requestingURL, "TimeOfRequest" : { "$lt" : d1}},
-                        { "_id" : 0, "TimeOfRequest":1, "Request":1}).sort([("TimeOfRequest", 1)])
+    resp = logCollection.find({fn.REQUESTING_URL: requestingURL, fn.DATETIME_OF_REQUEST : { "$lt" : d1}},
+                        { "_id" : 0, fn.DATETIME_OF_REQUEST:1, fn.REQUEST:1}).sort([(fn.DATETIME_OF_REQUEST, 1)])
     names = {}
     for r in resp:
         print r
 
-# Get users for URL, only for Sept 21.
-def show_users_for_URL(logCollection, requestingURL):
-    dateString = '2013-09-22T00:00:00Z'
-    d1 = datetime.datetime.strptime(dateString, "%Y-%m-%dT%H:%M:%SZ")
-    resp = logCollection.find({"RequestingUrl": requestingURL, "TimeOfRequest" : { "$lt" : d1}}, 
-                        { "_id" : 0, "Request":1})
+
+# Get users for URL
+def show_users_for_URL(logCollection, requestingURL, maxDate):
+    resp = logCollection.find({fn.REQUESTING_URL: requestingURL, fn.DATETIME_OF_REQUEST : { "$lt" : maxDate}},
+                        { "_id" : 0, fn.REQUEST:1})
     names = {}
     for r in resp:
         userName = extractUserName(r["Request"])
@@ -67,8 +63,8 @@ def extractUserName(request):
 
 print "Starting"
 
-COLLECTION_NAME = "DA_WebLog"
-repo = LogRecordRepository(COLLECTION_NAME)
-stats(repo.collection)
+repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG_SPARCE)
+#get_simple_stats(repo.collection)
+user_stats(repo.collection)
 
 print "Done"

@@ -1,9 +1,9 @@
 __author__ = 'meted'
 
+import FieldNames as fn
 
 class VideoInfoRecord:
-    PUB_DATE = "Pubdate"
-    INDEXABLE_FIELDS = [PUB_DATE]
+    INDEXABLE_FIELDS = [fn.PUB_DATE]
 
     channel = ""
     title = ""
@@ -16,10 +16,10 @@ class VideoInfoRecord:
 
     def to_json(self):
         doc = {
-            "Channel": self.channel,
-            "Title": self.title,
-            "link": self.link,
-            "Description": self.description,
-            self.PUB_DATE: self.pubdate
+            fn.VIDEO_CHANNEL: self.channel,
+            fn.VIDEO_TITLE: self.title,
+            fn.VIDEO_LINK: self.link,
+            fn.VIDEO_DESCRIPTION: self.description,
+            fn.PUB_DATE: self.pubdate
         }
         return doc

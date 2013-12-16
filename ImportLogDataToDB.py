@@ -15,6 +15,7 @@ def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint, on
     f = open(log_file, 'r')
     line_num = 0
     repo.drop_collection()
+
     for line in f:
         line_num += 1
         log_record = LogRecord(line)
@@ -47,6 +48,7 @@ def import_cdn_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
     f = open(log_file, 'r')
     line_num = 0
     repo.drop_collection()
+
     for line in f:
         line_num += 1
         cdn_record = CDNRecord(line)
@@ -70,7 +72,10 @@ def import_video_information_to_repo(repo):
     repo.drop_collection()
     record_num = 0
     for i in range(1, 203):
-        response = urllib2.urlopen("http://www.escapistmagazine.com/rss/videos/list/" + str(i) + ".xml")
+        try:
+            response = urllib2.urlopen("http://www.escapistmagazine.com/rss/videos/list/" + str(i) + ".xml")
+        except:
+            continue
         xml_raw = response.read()
         if not xml_raw:
             continue

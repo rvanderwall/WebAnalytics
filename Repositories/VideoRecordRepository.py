@@ -1,26 +1,14 @@
-import collections
-import re
-from LogFileHelper import get_title_and_description
-import config
-
 __author__ = 'meted'
 
-import pymongo
+import collections
+from LogFileHelper import get_title_and_description
 import VideoInfoRecord
+from BaseRepository import BaseRepository
 
 
-class VideoRecordRepository:
+class VideoRecordRepository(BaseRepository):
     def __init__(self, collection_name):
-        self.client = pymongo.MongoClient(config.host)
-        self.db = self.client.LogRecords
-        self.collection = self.db[collection_name]
-        #self.ensure_indexes()
-
-    def drop_collection(self):
-        self.collection.drop()
-
-    def insert_record(self, video_info_record):
-        self.collection.insert(video_info_record.to_json())
+        BaseRepository.__init__(self, collection_name)
 
     def ensure_indexes(self):
         for field in VideoInfoRecord.VideoInfoRecord.INDEXABLE_FIELDS:
@@ -35,3 +23,4 @@ class VideoRecordRepository:
         ordered_descriptions = collections.OrderedDict(sorted(descriptions.items()))
         # for k, v in ordered_descriptions.iteritems(): print k, v
         return ordered_descriptions
+

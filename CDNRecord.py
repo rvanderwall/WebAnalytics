@@ -3,14 +3,12 @@ __author__ = 'rlv'
 import datetime
 import re
 from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_cdn_time
+import FieldNames as fn
 
 
 class CDNRecord:
-    REQUESTING_URL = "RequestingUrl"
-    DATETIME_OF_REQUEST = "TimeOfRequest"
-    TIME_OF_REQUEST = "TimeOnlyOfRequest"
 
-    INDEXABLE_FIELDS = [REQUESTING_URL, DATETIME_OF_REQUEST, TIME_OF_REQUEST]
+    INDEXABLE_FIELDS = [fn.REQUESTING_URL, fn.DATETIME_OF_REQUEST, fn.TIME_OF_REQUEST]
 
     all_data_valid = False
 
@@ -22,14 +20,13 @@ class CDNRecord:
     day_of_week = 0   # 0 = Monday
     time_only = datetime.time()
     request = ""
-    verb = "GET"
-    status = 200
+    verb = ""
+    status = 0
     bytes = -1
     referrer = ""
     user_agent = ""
     os = ""
     browser = ""
-    index = 0
 
     def __init__(self, str_line):
         data = self.parse_cdn_data_line(str_line)
@@ -37,53 +34,50 @@ class CDNRecord:
             self.set_values_from_data(data)
             self.all_data_valid = True
 
-    def set_values_from_data(self, data):
+    def set_values_from_data(self, raw_data):
         self.index = 0
         #self.Virtual_URL = data[self.get_cur_index()]
-        self.requesting_url = data[self.get_cur_index()]
+        self.requesting_url = raw_data[fn.REQUESTING_URL]
         #self.RemoteLogName = data[self.getCurIndex()] # always '-'
-        self.user = data[self.get_cur_index()]
-        #self.TimeOfRequest = get_date_from_string(data[self.get_cur_index()], "+0000")
-        self.time_of_request = get_date_from_string_cdn_time(data[self.get_cur_index()])
+        self.user = raw_data[fn.REMOTE_USER]
+
+        self.time_of_request = get_date_from_string_cdn_time(raw_data[fn.DATETIME_OF_REQUEST])
         self.day_of_week = self.time_of_request.weekday()
         time_of_req = self.time_of_request.time()
         self.time_only = time_of_req.second + 60 * (time_of_req.minute + 60 * time_of_req.hour)
-        self.request = data[self.get_cur_index()]
-        self.verb = get_verb_from_request(self.request)
-        self.status = int(data[self.get_cur_index()])
 
-        b = data[self.get_cur_index()]
+        self.request = raw_data[fn.REQUEST]
+        self.verb = get_verb_from_request(self.request)
+        self.status = int(raw_data[fn.HTTP_STATUS])
+
+        b = raw_data[fn.BYTES_SENT]
         if b != '-':
             self.bytes = int(b)
-        self.referrer = data[self.get_cur_index()]
-        self.user_agent = data[self.get_cur_index()]
+
+        self.referrer = raw_data[fn.REFERRER]
+        self.user_agent = raw_data[fn.USER_AGENT]
         self.os = get_os_from_agent(self.user_agent)
         self.browser = get_browser_from_agent(self.user_agent)
 
     def to_json(self):
         doc = {
-            "URL": self.Virtual_URL,
-            self.REQUESTING_URL: self.requesting_url,
-            "RemoteLogName": self.RemoteLogName,
-            "RemoteUser": self.user,
-            self.DATETIME_OF_REQUEST: self.time_of_request,
-            "DayOfWeek": self.day_of_week,
-            self.TIME_OF_REQUEST: self.time_only,
-            "Request": self.request,
-            "Verb": self.verb,
-            "Status": self.status,
-            "Bytes": self.bytes,
-            "Referrer": self.referrer,
-            "UserAgent": self.user_agent,
-            "OS": self.os,
-            "Browser": self.browser
+            fn.URL: self.Virtual_URL,
+            fn.REQUESTING_URL: self.requesting_url,
+            fn.REMOTE_LOG_NAME: self.RemoteLogName,
+            fn.REMOTE_USER: self.user,
+            fn.DATETIME_OF_REQUEST: self.time_of_request,
+            fn.DAY_OF_WEEK: self.day_of_week,
+            fn.TIME_OF_REQUEST: self.time_only,
+            fn.REQUEST: self.request,
+            fn.HTTP_VERB: self.verb,
+            fn.HTTP_STATUS: self.status,
+            fn.BYTES_SENT: self.bytes,
+            fn.REFERRER: self.referrer,
+            fn.USER_AGENT: self.user_agent,
+            fn.USER_OS: self.os,
+            fn.USER_BROWSER: self.browser
         }
         return doc
-
-    def get_cur_index(self):
-        ii = self.index
-        self.index += 1
-        return ii
 
     @staticmethod
     def parse_cdn_data_line(line):
@@ -107,7 +101,17 @@ class CDNRecord:
 
         regex = '(\S*) - (.*) \[(.*)\] "(.*)" (\d*) (\S*) "(.*?)" "(.*?)" "-"'
         matches = re.match(regex, line)
-        if matches is not None:
-            return matches.groups()
-        else:
+        if matches is None:
             return None
+
+        groups = matches.groups()
+        raw_data = {}
+        raw_data[fn.REQUESTING_URL] = groups[0]
+        raw_data[fn.REMOTE_USER] = groups[1]
+        raw_data[fn.DATETIME_OF_REQUEST] = groups[2]
+        raw_data[fn.REQUEST] = groups[3]
+        raw_data[fn.HTTP_STATUS] = groups[4]
+        raw_data[fn.BYTES_SENT] = groups[5]
+        raw_data[fn.REFERRER] = groups[6]
+        raw_data[fn.USER_AGENT] = groups[7]
+        return raw_data
