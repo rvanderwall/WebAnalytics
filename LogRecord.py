@@ -42,6 +42,8 @@ class LogRecord:
         if data is not None:
             self.set_values_from_data(data)
             self.all_data_valid = True
+        else:
+            self.all_data_valid = False
 
     def set_values_from_data(self, raw_data):
         self.virtual_url = raw_data[fn.URL]
@@ -66,7 +68,12 @@ class LogRecord:
 
         b = raw_data[fn.BYTES_SENT]
         if b != '-':
-            self.bytes = int(b)
+            try:
+                self.bytes = int(b)
+            except:
+                print "BAD BYTES FIELD"
+                print b
+                self.bytes = 0
 
         self.referrer = raw_data[fn.REFERRER]
         self.user_agent = raw_data[fn.USER_AGENT]
@@ -78,8 +85,19 @@ class LogRecord:
 
         m = raw_data[fn.MEMORY_USE]
         if m != '-':
-            self.memory_use = int(m)
-        self.processing_time = int(raw_data[fn.PROCESSING_TIME])
+            try :
+                self.memory_use = int(m)
+            except:
+                print "BAD MEMORY FIELD"
+                print m
+                self.memory_use = 0
+        try:
+            p = raw_data[fn.PROCESSING_TIME]
+            self.processing_time = int(p)
+        except:
+            print "BAD PROCESSOR TIME FIELD"
+            print
+            self.processing_time = 0
 
     def to_json(self):
         doc = {
@@ -113,7 +131,7 @@ class LogRecord:
 
 
     @staticmethod
-    def parse_apache_data_line(line):
+    def try_regex1(line):
         """
             www.escapistmagazine.com 80.149.31.40 - Eagle Est1986 [24/Sep/2013:10:56:14 -0400] "GET /rss/videos/podcast/101-7908c74999845d359b932967635cd965.xml?uid=226565 HTTP/1.1" 200 227176 "-" "iTunes/11.1 (Macintosh; OS X 10.7.5) AppleWebKit/534.57.7" "- -" UkGoDgoAAGgAAFCvorsAAABM 2621440 1'
 
@@ -143,6 +161,17 @@ class LogRecord:
             return None
 
         groups = matches.groups()
+        if groups[10].find('"') != -1:
+            return None
+
+        return groups
+
+    @staticmethod
+    def parse_apache_data_line(line):
+        groups = LogRecord.try_regex1(line)
+        if groups is None:
+            return None
+
         raw_data = {}
         raw_data[fn.URL] = groups[0]
         raw_data[fn.REQUESTING_URL] = groups[1]
@@ -158,3 +187,44 @@ class LogRecord:
         raw_data[fn.MEMORY_USE] = groups[11]
         raw_data[fn.PROCESSING_TIME] = groups[12]
         return raw_data
+
+
+def test0():
+    logLine = 'URL REQ_URL - Rem User [21/Sep/2013:06:32:01 -0400] "GET REQ" 200 227176 "REF" "USR AGENT" "MOZ" Uj1 414 1'
+    data = LogRecord.parse_apache_data_line(logLine)
+    assert data[fn.URL] == "URL"
+    assert data[fn.REQUESTING_URL] == "REQ_URL"
+    assert data[fn.REMOTE_USER] == "Rem User"
+    assert data[fn.DATETIME_OF_REQUEST] == "21/Sep/2013:06:32:01 -0400"
+    assert data[fn.REQUEST] == "GET REQ"
+    assert data[fn.HTTP_STATUS] == "200"
+    assert data[fn.BYTES_SENT] == "227176"
+    assert data[fn.REFERRER] == "REF"
+    assert data[fn.USER_AGENT] == "USR AGENT"
+    assert data[fn.MOZILLA_PARAMS] == "MOZ"
+    assert data[fn.UNIQUE_ID] == "Uj1"
+    assert data[fn.MEMORY_USE] == "414"
+    assert data[fn.PROCESSING_TIME] == "1"
+    print "PASS0"
+
+def test1():
+    logLine = 'www.escapistmagazine.com 80.149.31.40 - Eagle Est1986 [24/Sep/2013:10:56:14 -0400] "GET /rss/videos/podcast/101-7908c74999845d359b932967635cd965.xml?uid=226565 HTTP/1.1" 200 227176 "-" "iTunes/11.1 (Macintosh; OS X 10.7.5) AppleWebKit/534.57.7" "- -" UkGoDgoAAGgAAFCvorsAAABM 2621440 1'
+    data = LogRecord.parse_apache_data_line(logLine)
+    assert data[fn.URL] == "www.escapistmagazine.com"
+    assert data[fn.REQUESTING_URL] == "80.149.31.40"
+    assert data[fn.REMOTE_USER] == "Eagle Est1986"
+    assert data[fn.DATETIME_OF_REQUEST] == "24/Sep/2013:10:56:14 -0400"
+    assert data[fn.REQUEST] == "GET /rss/videos/podcast/101-7908c74999845d359b932967635cd965.xml?uid=226565 HTTP/1.1"
+    assert data[fn.HTTP_STATUS] == "200"
+    assert data[fn.BYTES_SENT] == "227176"
+    assert data[fn.REFERRER] == "-"
+    assert data[fn.USER_AGENT] == "iTunes/11.1 (Macintosh; OS X 10.7.5) AppleWebKit/534.57.7"
+    assert data[fn.MOZILLA_PARAMS] == "- -"
+    assert data[fn.UNIQUE_ID] == "UkGoDgoAAGgAAFCvorsAAABM"
+    assert data[fn.MEMORY_USE] == "2621440"
+    assert data[fn.PROCESSING_TIME] == "1"
+    print "PASS1"
+
+if __name__ == "__main__":
+    test0()
+    test1()

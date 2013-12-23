@@ -7,7 +7,6 @@ from Repositories import LogRecordRepository as lr, CDNRecordRepository as cr, V
 
 print "START"
 
-MODE_VERIFY_ONLY = 0
 MODE_SPARSE = 1
 MODE_FULL = 2
 MODE_TEST = 3
@@ -16,19 +15,14 @@ MODE = MODE_TEST
 IMPORT_WEBLOG = False
 IMPORT_CDNLOG = False
 IMPORT_VIDEO_INFORMATION = False
-CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS = False
+CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS = True
 
 DATA_PATH = "/data"
 #DATA_PATH = "/media/analytics/workspace/projects/digitalalloy/data"
 APACHE_LOG = DATA_PATH + "/escweek_sorted.log"
 CDN_LOG = DATA_PATH + "/cdnweek_sorted.log"
 
-if MODE == MODE_VERIFY_ONLY:
-    LOG_COLLECTION_NAME = fn.COLLECTION_WEBLOG
-    CDN_COLLECTION_NAME = fn.COLLECTION_CDNLOG
-    USE_ROWS = sys.maxint
-    SKIP_ROWS = sys.maxint
-elif MODE == MODE_SPARSE:
+if MODE == MODE_SPARSE:
     LOG_COLLECTION_NAME = fn.COLLECTION_WEBLOG_SPARCE
     CDN_COLLECTION_NAME = fn.COLLECTION_CDNLOG_SPARCE
     USE_ROWS = 24000000
