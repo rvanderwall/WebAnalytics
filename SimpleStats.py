@@ -1,13 +1,14 @@
 __author__ = 'rlv'
 
 import datetime
-import numpy as np
 import re
-
+import numpy as np
 import matplotlib.pyplot as plt
 
+import FieldNames as fn
 
 def get_simple_stats(logCollection):
+
     resp = logCollection.count()
     print "NumberOfRecords: %d" % (resp)
 
@@ -17,27 +18,28 @@ def get_simple_stats(logCollection):
         print "Verbs:"
         print resp["result"]
 
-        # resp = logCollection.aggregate([{"$project": {"RequestingUrl": 1}},
-        #                                 {"$group": {"_id": "$RequestingUrl"}}])["result"]
-        # print "Unique requestors: %d" % (len(resp))
-
         resp = logCollection.aggregate([{"$group": {"_id": "$Status", "count": {"$sum": 1}}}])
         print "Status Codes:"
         print resp["result"]
 
-        resp = logCollection.aggregate([{"$group": {"_id": "$Referrer"}}])
-        print "All referrers:"
+        resp = logCollection.aggregate([{"$project": {fn.REQUESTING_URL: 1}},
+                                         {"$group": {"_id": "$" + fn.REQUESTING_URL}}])["result"]
+        print "Unique requestors: %d" % (len(resp))
+
+
+        resp = logCollection.aggregate([{"$group": {"_id": "$" + fn.REFERRER}}])
+        print "Unique referrers:"
         print len(resp["result"])
 
         regx = re.compile("escapistmagazine", re.IGNORECASE)
         check = {"Referrer": regx}
-        resp = logCollection.aggregate([{"$match": check}, {"$group": {"_id": "$Referrer"}}])
+        resp = logCollection.aggregate([{"$match": check}, {"$group": {"_id": "$" + fn.REFERRER}}])
         print "Escapist referrers:"
         print len(resp["result"])
 
         regx = re.compile("gurl", re.IGNORECASE)
         check = {"Referrer": regx}
-        resp = logCollection.aggregate([{"$match": check}, {"$group": {"_id": "$Referrer"}}])
+        resp = logCollection.aggregate([{"$match": check}, {"$group": {"_id": "$" + fn.REFERRER}}])
         print "Gurl referrers:"
         print len(resp["result"])
 
@@ -46,11 +48,8 @@ def get_simple_stats(logCollection):
         for minute in range(0, 60):
             start = 60 * (hour * 60 + minute)
             end = start + 60
-            #resp = logCollection.find({"TimeOnlyOfRequest": {"$gte": start, "$lt": end}, "Verb": "GET", "Status": 200})
             resp = logCollection.find(
-                {"TimeOnlyOfRequest": {"$gte": start, "$lt": end}, "Verb": "GET", "Status": 200}).distinct(
-                "RequestingUrl")
-            #data.append(resp.count())
+                {fn.TIME_OF_REQUEST: {"$gte": start, "$lt": end}, fn.HTTP_VERB: "GET", fn.HTTP_STATUS: 200}).distinct(fn.REQUESTING_URL)
             data.append(len(resp))
 
     #time_axis = np.arange(0, len(data) / 60, 1.0 / 60)
@@ -67,14 +66,9 @@ def get_simple_stats(logCollection):
         date2String = '2013-09-' + str(day + 1) + 'T00:16:09Z'
         d1 = datetime.datetime.strptime(date1String, "%Y-%m-%dT%H:%M:%SZ")
         d2 = datetime.datetime.strptime(date2String, "%Y-%m-%dT%H:%M:%SZ")
-        count = logCollection.find({"TimeOfRequest": {"$gte": d1, "$lt": d2}}).count()
+        count = logCollection.find({fn.DATETIME_OF_REQUEST: {"$gte": d1, "$lt": d2}}).count()
         cum = cum + count
         print "Count for day %d is %d" % (day, count)
     print "days cumulative: %d" % (cum)
 
-
-# d = db.Digital_Alloy_CDN
-# d.find({RequestingUrl : "80.149.31.40"}, {_id : 0, TimeOnlyOfRequest : 1, Request : 1}).pretty()
-# a = db.Digital_Alloy
-#  a.find({RequestingUrl : "80.149.31.40"},{_id:0, RemoteUser:1,Request:1,TimeOnlyOfRequest:1,OS:1}).pretty()
 

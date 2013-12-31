@@ -54,13 +54,8 @@ def agent_is_a_bot(agent):
         return False
 
 
-def get_date_from_string(dateString, offset):
-    #21/Sep/2013:06:32:01 -0400
-    #21/Sep/2013:00:00:00 +0000
-    date = datetime.datetime.strptime(dateString, "%d/%b/%Y:%H:%M:%S " + offset)
-    return date
 
-
+#21/Sep/2013:06:32:01 -0400
 def get_date_from_string_log_time(date_string):
     fmt = "%d/%b/%Y:%H:%M:%S"
     log_time = datetime.strptime(date_string[:-6], fmt)
@@ -70,6 +65,7 @@ def get_date_from_string_log_time(date_string):
     return utc_log_time
 
 
+#21/Sep/2013:00:00:00 +0000
 def get_date_from_string_cdn_time(date_string):
     fmt = "%d/%b/%Y:%H:%M:%S"
     log_time = datetime.strptime(date_string[:-6], fmt)
@@ -121,10 +117,43 @@ def get_url_details(request):
 
 regex_html = re.compile("<p>(?P<description>.*)</p>", re.IGNORECASE)
 
-
 def get_text_from_html(html):
     matches = regex_html.search(html)
     if matches is not None:
         return matches.group("description")
     else:
         return ""
+
+
+
+regex_video = re.compile("(?P<videos>^GET /videos/view/\S+/\S+$|^GET /videos/view/\S+/\S+\s.+$)", re.IGNORECASE)
+
+def check_url_for_video(log_record):
+    url = log_record.request
+    matches = regex_video.search(url)
+    if matches is None:
+        return False
+
+    return True
+
+
+def get_title_and_description(video_info):
+    title = re.sub(ur"['\-().,:&\" ]", "", video_info["Title"], 0, re.UNICODE).lower()
+    description = re.sub(ur"<.+?>", "", video_info["Description"], 0, re.UNICODE)
+    return title, description
+
+
+regex_title = re.compile(ur"\d+-(?P<title>\b.+\b)", re.IGNORECASE | re.UNICODE)
+regex_title_replace = re.compile(ur"['\-().,: ]", re.IGNORECASE | re.UNICODE)
+
+
+def add_description(log_record, descriptions):
+    matches = regex_title.search(log_record.name)
+    if matches is not None:
+        fixed_title = re.sub(regex_title_replace, "", matches.group("title"), 0).lower()
+        try:
+            log_record.fixed_name = fixed_title
+            log_record.description = descriptions[unicode(fixed_title)]
+        except KeyError:
+            #print "Cannot find the description for the video --> {0}".format(log_record.name)
+            pass
