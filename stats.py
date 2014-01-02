@@ -63,8 +63,9 @@ def extractUserName(request):
 
 print "Starting"
 
-repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG_SPARCE)
-#get_simple_stats(repo.collection)
-user_stats(repo.collection)
+repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG)
+get_simple_stats(repo.collection)
+#user_stats(repo.collection)
 
 print "Done"
+
