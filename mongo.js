@@ -9,3 +9,7 @@ resp = w.aggregate([{$match : {"TimeOfRequest" : { $lt : d1}}},
                                 {$project : {"RequestingUrl" : 1}},
                                 {$group : {"_id": "$RequestingUrl", "count": {$sum: 1}}}])
 
+
+
+--- git commands
+git checkout -- <file>  # aborts changes
