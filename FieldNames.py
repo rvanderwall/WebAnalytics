@@ -50,10 +50,14 @@ PROCESSING_TIME = "ProcessingTime"
 
 #
 # Fields from the Video
-PUB_DATE = "Pubdate"
-VIDEO_CHANNEL = "Channel"
-VIDEO_TITLE = "Title"
+CHANNEL_INDEX = "index_num"
+CHANNEL_TITLE = "channel_title"
+CHANNEL_DESCRIPTION = "channel_description"
+VIDEO_TITLE = "video_title"
 VIDEO_LINK = "link"
-VIDEO_DESCRIPTION = "Description"
+VIDEO_DESCRIPTION = "video_description"
+PUB_DATE = "Pubdate"
+VIDEO_CREATOR = "video_creator"
+VIDEO_CATEGORY = "video_category"
 
 

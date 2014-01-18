@@ -15,7 +15,8 @@ MODE = MODE_TEST
 IMPORT_WEBLOG = False
 IMPORT_CDNLOG = False
 IMPORT_VIDEO_INFORMATION = False
-CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS = True
+CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS = False
+UPDATE_WEBLOG_WITH_USERS = True
 
 DATA_PATH = "/data"
 #DATA_PATH = "/media/analytics/workspace/projects/digitalalloy/data"
@@ -67,4 +68,9 @@ if CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS:
                             descriptions=descriptions)
     # web_log_repo.ensure_indexes()
 
+if UPDATE_WEBLOG_WITH_USERS:
+    repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG)
+
+    video_web_log_repo = lr.LogRecordRepository(fn.COLLECTION_VIDEO_WEB_LOG)
+    video_web_log_repo.add_user_to_log(repo)
 

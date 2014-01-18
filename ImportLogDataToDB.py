@@ -71,9 +71,9 @@ def import_cdn_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint):
 def import_video_information_to_repo(repo):
     repo.drop_collection()
     record_num = 0
-    for i in range(1, 203):
+    for xml_index in range(1, 203):
         try:
-            response = urllib2.urlopen("http://www.escapistmagazine.com/rss/videos/list/" + str(i) + ".xml")
+            response = urllib2.urlopen("http://www.escapistmagazine.com/rss/videos/list/" + str(xml_index) + ".xml")
         except:
             continue
         xml_raw = response.read()
@@ -83,15 +83,22 @@ def import_video_information_to_repo(repo):
 
         for channel in root.findall("./channel"):
             channel_title = channel.find("title").text
+            channel_description = channel.find("description").text
             print channel_title
             for item in channel.findall("item"):
                 record = VideoInfoRecord()
+                record.xml_index = xml_index
                 record.channel = channel_title
+                record.channel_description = channel_description
+
                 record.title = item.find("title").text
                 record.link = item.find("link").text
                 record.description = get_text_from_html(item.find("description").text)
+                record.category = item.find("category").text
                 record.pubdate = datetime.strptime(item.find("pubDate").text, "%a, %d %b %Y %H:%M:%S %Z")
+                record.creator = item.find("{http://purl.org/dc/elements/1.1/}creator").text
                 record_num += 1
+
 
                 try:
                     repo.insert_record(record)

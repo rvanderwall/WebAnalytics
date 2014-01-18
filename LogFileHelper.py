@@ -157,3 +157,16 @@ def add_description(log_record, descriptions):
         except KeyError:
             #print "Cannot find the description for the video --> {0}".format(log_record.name)
             pass
+
+# Pull user name from request of this form:
+# "/rss/videos/podcast/1.xml?username=thisisthechris&xid=92a1bef8aa9861d8e66eba"
+def extractUserNameFromRequest(request):
+    params = request.split('?')
+    if len(params) < 2:
+        return None
+    userParam = params[1].split('&')[0]
+    fieldValue = userParam.split('=')
+    if fieldValue[0] == "username":
+        return fieldValue[1]
+    else:
+        return None

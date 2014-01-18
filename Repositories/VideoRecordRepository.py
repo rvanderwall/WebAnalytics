@@ -5,7 +5,6 @@ from LogFileHelper import get_title_and_description
 import VideoInfoRecord
 from BaseRepository import BaseRepository
 
-
 class VideoRecordRepository(BaseRepository):
     def __init__(self, collection_name):
         BaseRepository.__init__(self, collection_name)
@@ -23,4 +22,3 @@ class VideoRecordRepository(BaseRepository):
         ordered_descriptions = collections.OrderedDict(sorted(descriptions.items()))
         # for k, v in ordered_descriptions.iteritems(): print k, v
         return ordered_descriptions
-

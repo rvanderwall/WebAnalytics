@@ -1,6 +1,8 @@
 __author__ = 'robert'
 
 import json
+from odict import odict
+import re
 import networkx as nx
 import matplotlib.pyplot as plt
 
@@ -93,16 +95,27 @@ def examples():
 #{u'tsemple': 1, u'Thaddeus': 1, None: 12}
 def pull_name(name_part):
     n = name_part.replace('u\'','').replace('\'','')
-    return n.replace('{','').replace(' ', '')
+    return n.replace(' ', '')
 
 def get_names(json_line):
-    names = []
-    parts = json_line.split(',')
+    names = odict()
+    regex = '{(.*)}'
+    matches = re.match(regex, json_line)
+    if matches is None:
+        return names
+
+    groups = matches.groups()
+    name_list = groups[0]
+    parts = name_list.split(',')
     for p in parts:
         name_count = p.split(':')
         name = pull_name(name_count[0])
         if name != "None":
-            names.append(name)
+            count = int(name_count[1])
+            if name in names:
+                names[name] += count
+            else:
+                names[name] = count
     return names
 
 def read_user_file(fName):
@@ -113,39 +126,55 @@ def read_user_file(fName):
             names = get_names(line)
             for name1_idx in range(0, len(names)):
                 for name2_idx in range(name1_idx+1, len(names)):
-                    name1 = names[name1_idx]
-                    name2 = names[name2_idx]
-                    pairs.append((name1, name2))
+                    name1 = names.keys()[name1_idx]
+                    count1 = names.values()[name1_idx]
+                    name2 = names.keys()[name2_idx]
+                    count2 = names.values()[name2_idx]
+                    pairs.append((name1, count1, name2, count2))
     return pairs
 
 
-def remove_dups(list_of_pairs):
+def remove_dups_and_assign_weights(list_of_pairs):
     unique_pairs = []
     unique_pair_hash = {}
     for pair in list_of_pairs:
-        (n1, n2) = pair
+        (n1, c1, n2, c2) = pair
         s1 = n1 + "_" + n2
         s2 = n2 + "_" + n1
+        weight = c1*c2
         if s1 in unique_pair_hash:
-            unique_pair_hash[s1] += 1
+            unique_pair_hash[s1] += weight
         elif s2 in unique_pair_hash:
-            unique_pair_hash[s2] += 1
+            unique_pair_hash[s2] += weight
         else:
-            unique_pair_hash[s1] = 1
+            unique_pair_hash[s1] = weight
             unique_pairs.append((n1,n2))
 
     return unique_pairs, unique_pair_hash
 
-def test0():
+def test1():
     fileName = "UserByURL_Test"
     name_pairs = read_user_file(fileName)
     assert len(name_pairs) == 3
-    (unique_pairs, pair_hash) = remove_dups(name_pairs)
+    (unique_pairs, pair_hash) = remove_dups_and_assign_weights(name_pairs)
     assert len(unique_pairs) == 2
     assert pair_hash["user1_user2"] == 2
     assert pair_hash["user1_user3"] == 1
     assert len(pair_hash) == 2
-    print "PASS0"
+    print "PASS1"
+    draw_graph(unique_pairs, graph_layout="spring", node_size=500, labels=pair_hash)
+
+def test2():
+    fileName = "UserByURL_Test2"
+    name_pairs = read_user_file(fileName)
+    assert len(name_pairs) == 6
+    (unique_pairs, pair_hash) = remove_dups_and_assign_weights(name_pairs)
+    assert len(unique_pairs) == 3
+    assert pair_hash["user1_user2"] == 20
+    assert pair_hash["user1_user3"] == 56
+    assert pair_hash["user2_user3"] == 65
+    assert len(pair_hash) == 3
+    print "PASS2"
     draw_graph(unique_pairs, graph_layout="spring", node_size=500, labels=pair_hash)
 
 def draw_user_graph():
@@ -153,10 +182,11 @@ def draw_user_graph():
     # The Orig has all the data, this file has only some since the graph is too big
     name_pairs = read_user_file(fileName)
     print "Number of pairs %d" % (len(name_pairs))
-    (unique_pairs, pair_hash) = remove_dups(name_pairs)
+    (unique_pairs, pair_hash) = remove_dups_and_assign_weights(name_pairs)
     print "Number of unique pairs %d" % (len(unique_pairs))
     draw_graph(unique_pairs, graph_layout="spring", node_size=500, labels=pair_hash)
 
 if __name__ == "__main__":
-    test0()
+    test1()
+    test2()
     draw_user_graph()
