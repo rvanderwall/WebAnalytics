@@ -1,3 +1,5 @@
+from os.path import normpath, join
+
 __author__ = 'rlv'
 
 import sys
@@ -14,14 +16,15 @@ MODE_TEST = 3
 MODE = MODE_TEST
 IMPORT_WEBLOG = False
 IMPORT_CDNLOG = False
-IMPORT_VIDEO_INFORMATION = False
-CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS = False
+IMPORT_VIDEO_INFORMATION_ONLY = False
+CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = False
 UPDATE_WEBLOG_WITH_USERS = True
 
 DATA_PATH = "/data"
+# DATA_PATH = "N:\Projects\DigitalAlloy\data\weblogs"
 #DATA_PATH = "/media/analytics/workspace/projects/digitalalloy/data"
-APACHE_LOG = DATA_PATH + "/escweek_sorted.log"
-CDN_LOG = DATA_PATH + "/cdnweek_sorted.log"
+APACHE_LOG = normpath(join(DATA_PATH, "escweek_sorted.log"))
+CDN_LOG = normpath(join(DATA_PATH, "cdnweek_sorted.log"))
 
 if MODE == MODE_SPARSE:
     LOG_COLLECTION_NAME = fn.COLLECTION_WEBLOG_SPARCE
@@ -42,6 +45,10 @@ else:
     print "Invalid mode"
 
 if IMPORT_WEBLOG:
+    repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
+    import_video_information_to_repo(repo)
+    repo.ensure_indexes()
+
     repo = lr.LogRecordRepository(LOG_COLLECTION_NAME)
     import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS)
     repo.ensure_indexes()
@@ -51,12 +58,12 @@ if IMPORT_CDNLOG:
     import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
     repo.ensure_indexes()
 
-if IMPORT_VIDEO_INFORMATION:
+if IMPORT_VIDEO_INFORMATION_ONLY:
     repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
     import_video_information_to_repo(repo)
     repo.ensure_indexes()
 
-if CREATE_WEBLOG_WITH_ONLY_VIDEO_REQUESTS:
+if CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY:
     USE_ROWS = sys.maxint
     SKIP_ROWS = 1  # Don't actually Skip any
 
