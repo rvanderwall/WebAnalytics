@@ -13,15 +13,15 @@ MODE_SPARSE = 1
 MODE_FULL = 2
 MODE_TEST = 3
 
-MODE = MODE_TEST
+MODE = MODE_FULL
 IMPORT_WEBLOG = False
 IMPORT_CDNLOG = False
 IMPORT_VIDEO_INFORMATION_ONLY = False
 CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = False
 UPDATE_WEBLOG_WITH_USERS = True
 
-DATA_PATH = "/data"
-# DATA_PATH = "N:\Projects\DigitalAlloy\data\weblogs"
+# DATA_PATH = "/data"
+DATA_PATH = "N:\Projects\DigitalAlloy\data\weblogs"
 #DATA_PATH = "/media/analytics/workspace/projects/digitalalloy/data"
 APACHE_LOG = normpath(join(DATA_PATH, "escweek_sorted.log"))
 CDN_LOG = normpath(join(DATA_PATH, "cdnweek_sorted.log"))
@@ -44,24 +44,19 @@ elif MODE == MODE_TEST:
 else:
     print "Invalid mode"
 
-if IMPORT_WEBLOG:
-    repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
-    import_video_information_to_repo(repo)
-    repo.ensure_indexes()
-
-    repo = lr.LogRecordRepository(LOG_COLLECTION_NAME)
-    import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS)
-    repo.ensure_indexes()
-
-if IMPORT_CDNLOG:
-    repo = cr.CDNRecordRepository(CDN_COLLECTION_NAME)
-    import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
-    repo.ensure_indexes()
-
+# -----WEB LOGS-----
 if IMPORT_VIDEO_INFORMATION_ONLY:
     repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
-    import_video_information_to_repo(repo)
     repo.ensure_indexes()
+    import_video_information_to_repo(repo)
+
+if IMPORT_WEBLOG:
+    video_info_repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
+    descriptions = video_info_repo.get_descriptions()
+
+    repo = lr.LogRecordRepository(LOG_COLLECTION_NAME)
+    repo.ensure_indexes()
+    import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, descriptions=descriptions)
 
 if CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY:
     USE_ROWS = sys.maxint
@@ -71,13 +66,16 @@ if CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY:
     descriptions = video_info_repo.get_descriptions()
 
     web_log_repo = lr.LogRecordRepository(fn.COLLECTION_VIDEO_WEB_LOG)
-    import_log_data_to_repo(web_log_repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, only_videos=True,
-                            descriptions=descriptions)
-    # web_log_repo.ensure_indexes()
+    web_log_repo.ensure_indexes()
+    import_log_data_to_repo(web_log_repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, only_videos=True, descriptions=descriptions)
 
 if UPDATE_WEBLOG_WITH_USERS:
     repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG)
-
     video_web_log_repo = lr.LogRecordRepository(fn.COLLECTION_VIDEO_WEB_LOG)
     video_web_log_repo.add_user_to_log(repo)
 
+# -----CDN LOGS-----
+if IMPORT_CDNLOG:
+    repo = cr.CDNRecordRepository(CDN_COLLECTION_NAME)
+    repo.ensure_indexes()
+    import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)

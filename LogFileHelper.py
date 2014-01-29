@@ -5,6 +5,7 @@ from datetime import timedelta, datetime
 from pytz import timezone
 import pytz
 import collections
+import FieldNames as fn
 
 
 def get_verb_from_request(request):
@@ -138,8 +139,8 @@ def check_url_for_video(log_record):
 
 
 def get_title_and_description(video_info):
-    title = re.sub(ur"['\-().,:&\" ]", "", video_info["Title"], 0, re.UNICODE).lower()
-    description = re.sub(ur"<.+?>", "", video_info["Description"], 0, re.UNICODE)
+    title = re.sub(ur"['\-().,:&\" ]", "", video_info[fn.VIDEO_TITLE], 0, re.UNICODE).lower()
+    description = re.sub(ur"<.+?>", "", video_info[fn.VIDEO_DESCRIPTION], 0, re.UNICODE)
     return title, description
 
 
@@ -148,15 +149,16 @@ regex_title_replace = re.compile(ur"['\-().,: ]", re.IGNORECASE | re.UNICODE)
 
 
 def add_description(log_record, descriptions):
-    matches = regex_title.search(log_record.name)
-    if matches is not None:
-        fixed_title = re.sub(regex_title_replace, "", matches.group("title"), 0).lower()
-        try:
-            log_record.fixed_name = fixed_title
-            log_record.description = descriptions[unicode(fixed_title)]
-        except KeyError:
-            #print "Cannot find the description for the video --> {0}".format(log_record.name)
-            pass
+    if log_record.name is not None:
+        matches = regex_title.search(log_record.name)
+        if matches is not None:
+            fixed_title = re.sub(regex_title_replace, "", matches.group("title"), 0).lower()
+            try:
+                log_record.fixed_name = fixed_title
+                log_record.description = descriptions[unicode(fixed_title)]
+            except KeyError:
+                # print "Cannot find the description for the video --> {0}".format(log_record.name)
+                pass
 
 # Pull user name from request of this form:
 # "/rss/videos/podcast/1.xml?username=thisisthechris&xid=92a1bef8aa9861d8e66eba"

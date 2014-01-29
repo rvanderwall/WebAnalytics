@@ -5,9 +5,9 @@ import re
 from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_log_time, get_url_details
 import FieldNames as fn
 
-class LogRecord:
 
-    INDEXABLE_FIELDS = [fn.REQUESTING_URL,fn.DATETIME_OF_REQUEST, fn.TIME_OF_REQUEST]
+class LogRecord:
+    INDEXABLE_FIELDS = [fn.REQUESTING_URL, fn.DATETIME_OF_REQUEST, fn.TIME_OF_REQUEST, fn.DATA_TYPE, fn.DATA_SUBTYPE]
 
     all_data_valid = False
 
@@ -85,7 +85,7 @@ class LogRecord:
 
         m = raw_data[fn.MEMORY_USE]
         if m != '-':
-            try :
+            try:
                 self.memory_use = int(m)
             except:
                 print "BAD MEMORY FIELD"
@@ -207,6 +207,7 @@ def test0():
     assert data[fn.PROCESSING_TIME] == "1"
     print "PASS0"
 
+
 def test1():
     logLine = 'www.escapistmagazine.com 80.149.31.40 - Eagle Est1986 [24/Sep/2013:10:56:14 -0400] "GET /rss/videos/podcast/101-7908c74999845d359b932967635cd965.xml?uid=226565 HTTP/1.1" 200 227176 "-" "iTunes/11.1 (Macintosh; OS X 10.7.5) AppleWebKit/534.57.7" "- -" UkGoDgoAAGgAAFCvorsAAABM 2621440 1'
     data = LogRecord.parse_apache_data_line(logLine)
@@ -224,6 +225,7 @@ def test1():
     assert data[fn.MEMORY_USE] == "2621440"
     assert data[fn.PROCESSING_TIME] == "1"
     print "PASS1"
+
 
 if __name__ == "__main__":
     test0()
