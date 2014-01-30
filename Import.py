@@ -13,7 +13,7 @@ MODE_SPARSE = 1
 MODE_FULL = 2
 MODE_TEST = 3
 
-MODE = MODE_FULL
+MODE = MODE_TEST
 IMPORT_WEBLOG = False
 IMPORT_CDNLOG = False
 IMPORT_VIDEO_INFORMATION_ONLY = False
@@ -47,16 +47,16 @@ else:
 # -----WEB LOGS-----
 if IMPORT_VIDEO_INFORMATION_ONLY:
     repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
-    repo.ensure_indexes()
     import_video_information_to_repo(repo)
+    repo.ensure_indexes()
 
 if IMPORT_WEBLOG:
     video_info_repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
     descriptions = video_info_repo.get_descriptions()
 
     repo = lr.LogRecordRepository(LOG_COLLECTION_NAME)
-    repo.ensure_indexes()
     import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, descriptions=descriptions)
+    repo.ensure_indexes()
 
 if CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY:
     USE_ROWS = sys.maxint
@@ -66,8 +66,8 @@ if CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY:
     descriptions = video_info_repo.get_descriptions()
 
     web_log_repo = lr.LogRecordRepository(fn.COLLECTION_VIDEO_WEB_LOG)
-    web_log_repo.ensure_indexes()
     import_log_data_to_repo(web_log_repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, only_videos=True, descriptions=descriptions)
+    web_log_repo.ensure_indexes()
 
 if UPDATE_WEBLOG_WITH_USERS:
     repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG)
@@ -77,5 +77,6 @@ if UPDATE_WEBLOG_WITH_USERS:
 # -----CDN LOGS-----
 if IMPORT_CDNLOG:
     repo = cr.CDNRecordRepository(CDN_COLLECTION_NAME)
-    repo.ensure_indexes()
     import_cdn_data_to_repo(repo, CDN_LOG, SKIP_ROWS, USE_ROWS)
+    repo.ensure_indexes()
+

@@ -25,6 +25,7 @@ class LogRecord:
     name = ""
     fixed_name = ""
     description = ""
+    username = ""
     verb = ""
     status = 0
     bytes = -1
@@ -37,13 +38,15 @@ class LogRecord:
     memory_use = -1
     processing_time = 0
 
-    def __init__(self, str_line):
-        data = self.parse_apache_data_line(str_line)
-        if data is not None:
-            self.set_values_from_data(data)
-            self.all_data_valid = True
-        else:
-            self.all_data_valid = False
+    def __init__(self, str_line=None):
+        if str_line is not None:
+            data = self.parse_apache_data_line(str_line)
+            if data is not None:
+                self.set_values_from_data(data)
+                self.all_data_valid = True
+            else:
+                self.all_data_valid = False
+
 
     def set_values_from_data(self, raw_data):
         self.virtual_url = raw_data[fn.URL]
@@ -65,6 +68,7 @@ class LogRecord:
         self.type2 = url_details.type2
         self.section = url_details.section
         self.name = url_details.name
+        self.username = ""
 
         b = raw_data[fn.BYTES_SENT]
         if b != '-':
@@ -115,6 +119,7 @@ class LogRecord:
             fn.DATA_NAME: self.name,
             fn.DATA_FIXED_NAME: self.fixed_name,
             fn.DATA_DESCRIPTION: self.description,
+            fn.DATA_USERNAME: self.username,
             fn.HTTP_VERB: self.verb,
             fn.HTTP_STATUS: self.status,
             fn.BYTES_SENT: self.bytes,

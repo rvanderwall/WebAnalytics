@@ -33,12 +33,14 @@ USER_OS = "OS"
 USER_BROWSER = "Browser"
 
 # Fields found only in the WebLog
+DATA_ID = "_id"
 DATA_TYPE = "Type"
 DATA_SUBTYPE = "Type2"
 DATA_SECTION = "Section"
 DATA_NAME = "Name"
 DATA_FIXED_NAME = "FixedName"
 DATA_DESCRIPTION = "Description"
+DATA_USERNAME = "Username"
 
 MOZILLA_PARAMS = "MozillaParameters"
 UNIQUE_ID = "UniqueId"
@@ -56,8 +58,7 @@ CHANNEL_DESCRIPTION = "channel_description"
 VIDEO_TITLE = "video_title"
 VIDEO_LINK = "link"
 VIDEO_DESCRIPTION = "video_description"
+VIDEO_USERNAME = "username"
 PUB_DATE = "Pubdate"
 VIDEO_CREATOR = "video_creator"
 VIDEO_CATEGORY = "video_category"
-
-
