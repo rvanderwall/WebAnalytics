@@ -2,6 +2,8 @@ __author__ = 'rlv'
 
 import datetime
 import re
+from bson import ObjectId
+
 from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_log_time, get_url_details
 import FieldNames as fn
 
@@ -11,6 +13,7 @@ class LogRecord:
 
     all_data_valid = False
 
+    id = None
     virtual_url = ""
     requesting_url = ""
     RemoteLogName = "-"
@@ -49,6 +52,7 @@ class LogRecord:
 
 
     def set_values_from_data(self, raw_data):
+        self.id = ObjectId()
         self.virtual_url = raw_data[fn.URL]
         self.requesting_url = raw_data[fn.REQUESTING_URL]
         #self.RemoteLogName = data[self.getCurIndex()] # always '-'
@@ -105,6 +109,7 @@ class LogRecord:
 
     def to_json(self):
         doc = {
+            fn.DATA_ID: self.id,
             fn.URL: self.virtual_url,
             fn.REQUESTING_URL: self.requesting_url,
             fn.REMOTE_LOG_NAME: self.RemoteLogName,
@@ -133,6 +138,35 @@ class LogRecord:
             fn.PROCESSING_TIME: self.processing_time
         }
         return doc
+
+    def from_json(self, json):
+        self.id = json[fn.DATA_ID]
+        self.virtual_url = json[fn.URL]
+        self.requesting_url = json[fn.REQUESTING_URL]
+        self.RemoteLogName = json[fn.REMOTE_LOG_NAME]
+        self.user = json[fn.REMOTE_USER]
+        self.time_of_request = json[fn.DATETIME_OF_REQUEST]
+        self.DayOfWeek = json[fn.DAY_OF_WEEK]
+        self.time_only = json[fn.TIME_OF_REQUEST]
+        self.request = json[fn.REQUEST]
+        self.type = json[fn.DATA_TYPE]
+        self.type2 = json[fn.DATA_SUBTYPE]
+        self.section = json[fn.DATA_SECTION]
+        self.name = json[fn.DATA_NAME]
+        self.fixed_name = json[fn.DATA_FIXED_NAME]
+        self.description = json[fn.DATA_DESCRIPTION]
+        self.username = json[fn.DATA_USERNAME]
+        self.verb = json[fn.HTTP_VERB]
+        self.status = json[fn.HTTP_STATUS]
+        self.bytes = json[fn.BYTES_SENT]
+        self.referrer = json[fn.REFERRER]
+        self.user_agent = json[fn.USER_AGENT]
+        self.os = json[fn.USER_OS]
+        self.browser = json[fn.USER_BROWSER]
+        self.mozilla_parms = json[fn.MOZILLA_PARAMS]
+        self.unique_id = json[fn.UNIQUE_ID]
+        self.memory_use = json[fn.MEMORY_USE]
+        self.processing_time = json[fn.PROCESSING_TIME]
 
 
     @staticmethod

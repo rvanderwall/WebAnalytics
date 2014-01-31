@@ -17,8 +17,8 @@ MODE = MODE_TEST
 IMPORT_WEBLOG = False
 IMPORT_CDNLOG = False
 IMPORT_VIDEO_INFORMATION_ONLY = False
-CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = False
-UPDATE_WEBLOG_WITH_USERS = True
+CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = True
+UPDATE_WEBLOG_WITH_USERS = False
 
 # DATA_PATH = "/data"
 DATA_PATH = "N:\Projects\DigitalAlloy\data\weblogs"
@@ -72,6 +72,7 @@ if CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY:
 if UPDATE_WEBLOG_WITH_USERS:
     repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG)
     video_web_log_repo = lr.LogRecordRepository(fn.COLLECTION_VIDEO_WEB_LOG)
+    video_web_log_repo.reset_all_users()
     video_web_log_repo.add_user_to_log(repo)
 
 # -----CDN LOGS-----

@@ -6,7 +6,7 @@ import datetime
 import pytz
 import re
 
-import LogRecord
+from LogRecord import LogRecord
 from BaseRepository import BaseRepository
 import FieldNames as fn
 from LogFileHelper import extractUserNameFromRequest
@@ -19,7 +19,7 @@ class LogRecordRepository(BaseRepository):
         BaseRepository.__init__(self, collection_name)
 
     def ensure_indexes(self):
-        for field in LogRecord.LogRecord.INDEXABLE_FIELDS:
+        for field in LogRecord.INDEXABLE_FIELDS:
             self.collection.create_index(field)
 
     def add_user_to_log(self, weblog_repo):
@@ -35,12 +35,15 @@ class LogRecordRepository(BaseRepository):
             if user != None:
                 print "{0} viewed {1} at {2}".format(user, video_log[fn.DATA_NAME], video_log[fn.DATETIME_OF_REQUEST])
                 video_log[fn.DATA_USERNAME] = user
-                self.insert_dictionary(ObjectId(video_log[fn.DATA_ID]), video_log)
+                log_record = LogRecord()
+                log_record.from_json(video_log)
+                self.insert_record(log_record)
+                # self.insert_dictionary(ObjectId(video_log[fn.DATA_ID]), video_log)
 
     def get_user_at_time(self, time, IP):
         log_timezone = pytz.utc
         d1 = log_timezone.localize(time)
-        d2 = d1 - datetime.timedelta(minutes=1)
+        d2 = d1 - datetime.timedelta(minutes=5)
 
         res = self.collection.find({fn.DATETIME_OF_REQUEST: {"$lte": d1, "$gt": d2},
                                     fn.REQUEST: username_regx,
@@ -50,4 +53,7 @@ class LogRecordRepository(BaseRepository):
             return extractUserNameFromRequest(req)
         else:
             return None
+
+    def reset_all_users(self):
+        self.collection.update({}, {"$set": {fn.DATA_USERNAME: ""}}, upsert=False)
 

@@ -14,9 +14,8 @@ class BaseRepository():
         self.collection.drop()
 
     def insert_record(self, log_record):
-        self.collection.insert(log_record.to_json())
+        self.collection.save(log_record.to_json())
 
-    def insert_dictionary(self, id, log_dictionary):
-        # self.collection.update({"_id": id}, {"$set": log_dictionary}, upsert=False)
-        self.collection.save(log_dictionary)
+    # def insert_dictionary(self, id, log_dictionary):
+    #     self.collection.save(log_dictionary)
 
