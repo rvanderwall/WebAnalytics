@@ -1,15 +1,16 @@
-from bson.objectid import ObjectId
-
 __author__ = 'rlv'
 
 import datetime
-import pytz
 import re
 
+import pytz
+
 from LogRecord import LogRecord
+
 from BaseRepository import BaseRepository
 import FieldNames as fn
 from LogFileHelper import extractUserNameFromRequest
+
 
 username_regx = re.compile("username", re.IGNORECASE)
 
@@ -54,6 +55,6 @@ class LogRecordRepository(BaseRepository):
         else:
             return None
 
-    def reset_all_users(self):
-        self.collection.update({}, {"$set": {fn.DATA_USERNAME: ""}}, upsert=False)
+    def reset_all_usernames(self):
+        self.db.eval('db.TestData.update({},{$set:{Username:\'\'}}, false, true)')
 

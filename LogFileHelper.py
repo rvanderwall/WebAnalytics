@@ -2,9 +2,11 @@ __author__ = 'rlv'
 
 import re
 from datetime import timedelta, datetime
+import collections
+
 from pytz import timezone
 import pytz
-import collections
+
 import FieldNames as fn
 
 
@@ -53,7 +55,6 @@ def agent_is_a_bot(agent):
         return True
     else:
         return False
-
 
 
 #21/Sep/2013:06:32:01 -0400
@@ -118,6 +119,7 @@ def get_url_details(request):
 
 regex_html = re.compile("<p>(?P<description>.*)</p>", re.IGNORECASE)
 
+
 def get_text_from_html(html):
     matches = regex_html.search(html)
     if matches is not None:
@@ -126,8 +128,8 @@ def get_text_from_html(html):
         return ""
 
 
-
 regex_video = re.compile("(?P<videos>^GET /videos/view/\S+/\S+$|^GET /videos/view/\S+/\S+\s.+$)", re.IGNORECASE)
+
 
 def check_url_for_video(log_record):
     url = log_record.request

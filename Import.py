@@ -1,11 +1,12 @@
-from os.path import normpath, join
-
 __author__ = 'rlv'
 
 import sys
+from os.path import normpath, join
+
 import FieldNames as fn
 from ImportLogDataToDB import import_log_data_to_repo, import_cdn_data_to_repo, import_video_information_to_repo
 from Repositories import LogRecordRepository as lr, CDNRecordRepository as cr, VideoRecordRepository as vr
+
 
 print "START"
 
@@ -17,8 +18,8 @@ MODE = MODE_TEST
 IMPORT_WEBLOG = False
 IMPORT_CDNLOG = False
 IMPORT_VIDEO_INFORMATION_ONLY = False
-CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = True
-UPDATE_WEBLOG_WITH_USERS = False
+CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = False
+UPDATE_WEBLOG_WITH_USERS = True
 
 # DATA_PATH = "/data"
 DATA_PATH = "N:\Projects\DigitalAlloy\data\weblogs"
@@ -72,7 +73,7 @@ if CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY:
 if UPDATE_WEBLOG_WITH_USERS:
     repo = lr.LogRecordRepository(fn.COLLECTION_WEBLOG)
     video_web_log_repo = lr.LogRecordRepository(fn.COLLECTION_VIDEO_WEB_LOG)
-    video_web_log_repo.reset_all_users()
+    video_web_log_repo.reset_all_usernames()
     video_web_log_repo.add_user_to_log(repo)
 
 # -----CDN LOGS-----
