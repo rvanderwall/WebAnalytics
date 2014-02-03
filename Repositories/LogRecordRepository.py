@@ -56,5 +56,5 @@ class LogRecordRepository(BaseRepository):
             return None
 
     def reset_all_usernames(self):
-        self.db.eval('db.TestData.update({},{$set:{Username:\'\'}}, false, true)')
+        self.db.eval('db.DA_WebLog_Videos.update({},{$set:{Username:\'\'}}, false, true)')
 
