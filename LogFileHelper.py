@@ -7,7 +7,8 @@ import collections
 from pytz import timezone
 import pytz
 
-import FieldNames as fn
+from Records import FieldNames as fn
+
 
 
 def get_verb_from_request(request):

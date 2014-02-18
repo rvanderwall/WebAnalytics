@@ -1,7 +1,6 @@
 __author__ = 'robert'
 
 import pymongo
-
 import config
 
 

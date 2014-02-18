@@ -1,10 +1,11 @@
 __author__ = 'rlv'
 
 import datetime
-import FieldNames as fn
 from LogFileHelper import extractUserNameFromRequest
 from Repositories import LogRecordRepository as lr
 from Repositories import VideoRecordRepository as vr
+from Records import FieldNames as fn
+
 
 dateString = '2013-09-21T08:00:00Z'
 dateString = '2013-09-22T00:00:00Z'
@@ -34,6 +35,7 @@ def je_stats(logCollection):
 	"162.243.4.148",
 	"162.243.4.149",
 	"192.241.251.101",
+    "198.199.109.13"
     ]
     for ip in IPs:
         print ("FROM IP {0}").format(ip)

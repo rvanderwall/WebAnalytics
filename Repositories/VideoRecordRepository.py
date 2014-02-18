@@ -2,8 +2,9 @@ __author__ = 'meted'
 
 import collections
 from LogFileHelper import get_title_and_description
-import VideoInfoRecord
 from BaseRepository import BaseRepository
+from Records import VideoInfoRecord
+
 
 class VideoRecordRepository(BaseRepository):
     def __init__(self, collection_name):

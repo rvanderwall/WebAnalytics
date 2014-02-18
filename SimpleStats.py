@@ -4,8 +4,9 @@ import datetime
 import re
 import numpy as np
 import matplotlib.pyplot as plt
+from Records import FieldNames as fn
 
-import FieldNames as fn
+
 
 def get_simple_stats(logCollection):
 

@@ -3,9 +3,10 @@ __author__ = 'rlv'
 import sys
 from os.path import normpath, join
 
-import FieldNames as fn
 from ImportLogDataToDB import import_log_data_to_repo, import_cdn_data_to_repo, import_video_information_to_repo
 from Repositories import LogRecordRepository as lr, CDNRecordRepository as cr, VideoRecordRepository as vr
+from config import DATA_PATH
+from Records import FieldNames as fn
 
 
 print "START"
@@ -21,9 +22,6 @@ IMPORT_VIDEO_INFORMATION_ONLY = False
 CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = False
 UPDATE_WEBLOG_WITH_USERS = True
 
-# DATA_PATH = "/data"
-DATA_PATH = "N:\Projects\DigitalAlloy\data\weblogs"
-#DATA_PATH = "/media/analytics/workspace/projects/digitalalloy/data"
 APACHE_LOG = normpath(join(DATA_PATH, "escweek_sorted.log"))
 CDN_LOG = normpath(join(DATA_PATH, "cdnweek_sorted.log"))
 

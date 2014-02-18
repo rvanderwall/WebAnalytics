@@ -6,9 +6,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 
 from LogFileHelper import get_text_from_html, check_url_for_video, add_description
-from VideoInfoRecord import VideoInfoRecord
-from LogRecord import LogRecord
-from CDNRecord import CDNRecord
+from Records import CDNRecord, LogRecord, VideoInfoRecord
 
 
 def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint, only_videos=False, descriptions=None):

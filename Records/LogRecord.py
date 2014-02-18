@@ -5,7 +5,8 @@ import re
 from bson import ObjectId
 
 from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_log_time, get_url_details
-import FieldNames as fn
+from Records import FieldNames as fn
+
 
 
 class LogRecord:

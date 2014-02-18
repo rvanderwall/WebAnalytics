@@ -5,11 +5,10 @@ import re
 
 import pytz
 
-from LogRecord import LogRecord
-
 from BaseRepository import BaseRepository
-import FieldNames as fn
 from LogFileHelper import extractUserNameFromRequest
+from Records import LogRecord
+
 
 
 username_regx = re.compile("username", re.IGNORECASE)

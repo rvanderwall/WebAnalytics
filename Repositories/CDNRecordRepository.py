@@ -1,7 +1,8 @@
 __author__ = 'robert'
 
-import CDNRecord
 from BaseRepository import BaseRepository
+from Records import CDNRecord
+
 
 class CDNRecordRepository(BaseRepository):
     def __init__(self, collection_name):
