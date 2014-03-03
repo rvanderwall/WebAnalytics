@@ -24,7 +24,6 @@ def test_line_parser_all_fields(th):
     th.should_be(res[walp.REQUESTED_URL], "http://localhost:8080/markalar/4/")
     th.should_be(res[walp.USER_AGENT], "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1")
     th.should_be(res[walp.EXTRA_DATA], "EXD")
-    th.PASS("test_line_parser_all_fields")
 
 def test_line_parser_missing_fields(th):
     # Id,ActionTypeId,MemberId,Created,CampaignId,TrademarkId,ProductTypeId,InventoryId,CategoryId,CustomListId,Identifier,UserIp,Url,RefererUrl,UserAgentString,ExtraData
@@ -45,14 +44,15 @@ def test_line_parser_missing_fields(th):
     th.should_be(res[walp.REQUESTED_URL], "")
     th.should_be(res[walp.USER_AGENT], "")
     th.should_be(res[walp.EXTRA_DATA], "")
-    th.PASS("test_line_parser_missing_fields")
 
 def can_build_record(th):
     line = "1,2,3,1/20/2012 13:53,4,5,6,7,8,9,10,212.156.132.66,http://localhost:8080/markalar/4/,REF,Mozilla/5.0 (Windows NT 6.1; WOW64; rv:9.0.1) Gecko/20100101 Firefox/9.0.1,EXD"
     record = WebActivityRecord(line)
+    th.should_be(record.day_of_week, 4)
+    th.should_be(record.category_id, 8)
 
 if __name__ == "__main__":
     th = TestHelper()
-    test_line_parser_all_fields(th)
-    test_line_parser_missing_fields(th)
-    can_build_record(th)
+    th.run_test(test_line_parser_all_fields)
+    th.run_test(test_line_parser_missing_fields)
+    th.run_test(can_build_record)
