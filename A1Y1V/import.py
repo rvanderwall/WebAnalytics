@@ -1,12 +1,13 @@
+from DigitalAlloy.Repositories import LogRecordRepository as lr
+
 __author__ = 'rlv'
 
 import sys
 from os.path import normpath, join
 
-from ImportLogDataToDB import import_log_data_to_repo, import_cdn_data_to_repo, import_video_information_to_repo
-from Repositories import LogRecordRepository as lr, CDNRecordRepository as cr, VideoRecordRepository as vr
-from config import DATA_PATH
-from Records import FieldNames as fn
+from DigitalAlloy.ImportLogDataToDB import import_log_data_to_repo, import_cdn_data_to_repo, import_video_information_to_repo
+from DigitalAlloy.config import DATA_PATH, WEB_LOG_DATA, CDN_LOG_DATA
+from DigitalAlloy.Records import FieldNames as fn
 
 
 print "START"
@@ -22,8 +23,8 @@ IMPORT_VIDEO_INFORMATION_ONLY = False
 CREATE_WEBLOG_WITH_VIDEO_REQUESTS_ONLY = False
 UPDATE_WEBLOG_WITH_USERS = True
 
-APACHE_LOG = normpath(join(DATA_PATH, "escweek_sorted.log"))
-CDN_LOG = normpath(join(DATA_PATH, "cdnweek_sorted.log"))
+APACHE_LOG = normpath(join(DATA_PATH, WEB_LOG_DATA))
+CDN_LOG = normpath(join(DATA_PATH, CDN_LOG_DATA))
 
 if MODE == MODE_SPARSE:
     LOG_COLLECTION_NAME = fn.COLLECTION_WEBLOG_SPARCE
@@ -36,8 +37,8 @@ elif MODE == MODE_FULL:
     USE_ROWS = sys.maxint
     SKIP_ROWS = 1  # Don't actually Skip any
 elif MODE == MODE_TEST:
-    LOG_COLLECTION_NAME = "DA_WebLog_Test"
-    CDN_COLLECTION_NAME = "DA_CDNLog_Test"
+    LOG_COLLECTION_NAME = "TEST_WebLog"
+    CDN_COLLECTION_NAME = "TEST_CDNLog"
     USE_ROWS = sys.maxint
     SKIP_ROWS = sys.maxint
 else:

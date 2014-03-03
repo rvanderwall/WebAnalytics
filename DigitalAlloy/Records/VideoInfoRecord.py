@@ -1,7 +1,5 @@
 __author__ = 'meted'
 
-from Records import FieldNames as fn
-
 
 class VideoInfoRecord:
     INDEXABLE_FIELDS = [fn.PUB_DATE]

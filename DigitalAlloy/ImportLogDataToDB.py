@@ -1,3 +1,5 @@
+from DigitalAlloy.Records import CDNRecord, LogRecord, VideoInfoRecord
+
 __author__ = 'rlv'
 
 import sys
@@ -5,8 +7,7 @@ import urllib2
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
-from LogFileHelper import get_text_from_html, check_url_for_video, add_description
-from Records import CDNRecord, LogRecord, VideoInfoRecord
+from DigitalAlloy.LogFileHelper import get_text_from_html, check_url_for_video, add_description
 
 
 def import_log_data_to_repo(repo, log_file, skip_rows=1, max_rows=sys.maxint, only_videos=False, descriptions=None):

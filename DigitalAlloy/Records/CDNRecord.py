@@ -2,8 +2,9 @@ __author__ = 'rlv'
 
 import datetime
 import re
+
 from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_cdn_time
-from Records import FieldNames as fn
+from DigitalAlloy.Records import FieldNames as fn
 
 
 class CDNRecord:

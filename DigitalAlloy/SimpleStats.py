@@ -3,9 +3,10 @@ __author__ = 'rlv'
 import datetime
 import re
 import numpy as np
-import matplotlib.pyplot as plt
-from Records import FieldNames as fn
 
+import matplotlib.pyplot as plt
+
+from DigitalAlloy.Records import FieldNames as fn
 
 
 def get_simple_stats(logCollection):

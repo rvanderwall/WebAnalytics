@@ -1,7 +1,7 @@
 __author__ = 'robert'
 
 import pymongo
-import config
+from A_1Y1V import config
 
 
 class BaseRepository():
