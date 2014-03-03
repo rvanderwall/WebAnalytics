@@ -7,6 +7,3 @@ CUSTOMER = "DA"
 DATA_PATH = "/media/MorningBeacon/MorningBeacon/DigitalAlloyData"
 WEB_LOG_DATA = "escweek_sorted.log"
 CDN_LOG_DATA = "cdnweek_sorted.log"
-
-CUSTOMER = "1Y1V"
-DATA_PATH = "/media/MorningBeacon/MorningBeacon/1Y1VData"

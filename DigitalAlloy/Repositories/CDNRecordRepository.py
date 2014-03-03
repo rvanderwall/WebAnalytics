@@ -1,13 +1,12 @@
-__author__ = 'rlv'
+__author__ = 'robert'
 
 import BaseRepository
-import Records.WebActivityRecord as WebActivityRecord
+from DigitalAlloy.Records.CDNRecord import CDNRecord
 
-
-class WebActivityRecordRepository(BaseRepository):
+class CDNRecordRepository(BaseRepository):
     def __init__(self, collection_name):
         BaseRepository.__init__(self, collection_name)
 
     def ensure_indexes(self):
-        for field in WebActivityRecord.INDEXABLE_FIELDS:
+        for field in CDNRecord.CDNRecord.INDEXABLE_FIELDS:
             self.collection.create_index(field)

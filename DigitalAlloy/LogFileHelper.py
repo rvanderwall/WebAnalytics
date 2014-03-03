@@ -1,12 +1,12 @@
 __author__ = 'rlv'
 
 import re
-from datetime import timedelta, datetime
 import collections
+from datetime import timedelta, datetime
 from pytz import timezone
 import pytz
 
-from DigitalAlloy.Records import FieldNames as fn
+import DigitalAlloy.Records.FieldNames as fn
 
 
 def get_verb_from_request(request):

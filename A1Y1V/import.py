@@ -1,14 +1,7 @@
-from DigitalAlloy.Repositories import LogRecordRepository as lr
-
 __author__ = 'rlv'
 
 import sys
 from os.path import normpath, join
-
-from DigitalAlloy.ImportLogDataToDB import import_log_data_to_repo, import_cdn_data_to_repo, import_video_information_to_repo
-from DigitalAlloy.config import DATA_PATH, WEB_LOG_DATA, CDN_LOG_DATA
-from DigitalAlloy.Records import FieldNames as fn
-
 
 print "START"
 

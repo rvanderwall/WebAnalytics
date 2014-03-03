@@ -1,11 +1,11 @@
 __author__ = 'robert'
 
 import pymongo
+import config
 
 class BaseRepository():
-
-    def __init__(self, collection_name, host):
-        self.client = pymongo.MongoClient(host)
+    def __init__(self, collection_name):
+        self.client = pymongo.MongoClient(config.host)
         self.db = self.client.LogRecords
         self.collection = self.db[collection_name]
 

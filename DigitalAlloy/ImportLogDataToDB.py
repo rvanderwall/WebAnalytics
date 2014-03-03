@@ -1,4 +1,7 @@
-from DigitalAlloy.Records import CDNRecord, LogRecord, VideoInfoRecord
+
+from DigitalAlloy.Records.CDNRecord import CDNRecord
+from DigitalAlloy.Records.LogRecord import LogRecord
+from DigitalAlloy.Records.VideoInfoRecord import VideoInfoRecord
 
 __author__ = 'rlv'
 

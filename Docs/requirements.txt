@@ -1,6 +1,7 @@
 # Install all of our production dependencies only.
 # use line -- pip install -r requirements.txt
 pymongo
+pytz
 odict
 #numpy
 #matplotlib

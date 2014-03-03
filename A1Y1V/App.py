@@ -1,1 +1,6 @@
-__author__ = 'robert'
+__author__ = 'rlv'
+
+import config
+
+print "Starting App"
+print config.CUSTOMER

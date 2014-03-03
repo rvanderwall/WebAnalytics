@@ -1,7 +1,7 @@
 __author__ = 'robert'
 
 import json
-from odict import odict
+import odict
 import re
 import networkx as nx
 import matplotlib.pyplot as plt

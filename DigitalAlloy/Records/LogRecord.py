@@ -2,10 +2,10 @@ __author__ = 'rlv'
 
 import datetime
 
-from bson import ObjectId
+import bson
 
-from LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_log_time, get_url_details
-from DigitalAlloy.Records import FieldNames as fn
+from DigitalAlloy.LogFileHelper import get_browser_from_agent, get_os_from_agent, get_verb_from_request, get_date_from_string_log_time, get_url_details
+import FieldNames as fn
 
 
 class LogRecord:
@@ -52,7 +52,7 @@ class LogRecord:
 
 
     def set_values_from_data(self, raw_data):
-        self.id = ObjectId()
+        self.id = bson.ObjectId()
         self.virtual_url = raw_data[fn.URL]
         self.requesting_url = raw_data[fn.REQUESTING_URL]
         #self.RemoteLogName = data[self.getCurIndex()] # always '-'

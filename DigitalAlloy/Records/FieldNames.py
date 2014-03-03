@@ -1,6 +1,6 @@
 __author__ = 'robert'
 
-from config import CUSTOMER
+from DigitalAlloy.config import CUSTOMER
 
 #
 # Names of the Database collections

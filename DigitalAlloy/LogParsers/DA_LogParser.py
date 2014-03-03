@@ -2,7 +2,7 @@ __author__ = 'robert'
 
 import re
 
-from DigitalAlloy.Records import FieldNames as fn
+import DigitalAlloy.Records.FieldNames as fn
 
 def try_regex1(line):
     """
