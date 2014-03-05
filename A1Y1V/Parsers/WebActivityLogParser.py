@@ -27,6 +27,13 @@ EXTRA_DATA = "EXD"
 # CampaignId,TrademarkId,ProductTypeId,InventoryId,CategoryId,CustomListId,Identifier,UserIp,Url,RefererUrl,UserAgentString,ExtraData
 
 def parse_line(line):
+    if line == None:
+        return None
+    if len(line)< 15:
+        return None
+    if line[0] == 'I':
+        return None
+
     parts = line.split(",")
     parsing = {}
     parsing[ID] = int(parts[0])
@@ -41,7 +48,7 @@ def parse_line(line):
     parsing[CATEGORY_ID] = get_nullable_integer(parts[8])
     parsing[CUSTOM_LIST_ID] = get_nullable_integer(parts[9])
 
-    parsing[IDENTIFIER] = get_nullable_integer(parts[10])
+    parsing[IDENTIFIER] = parts[10]
     parsing[USER_IP] = parts[11]
     parsing[REQUESTED_URL] = parts[12]
     parsing[REFERRER] = parts[13]

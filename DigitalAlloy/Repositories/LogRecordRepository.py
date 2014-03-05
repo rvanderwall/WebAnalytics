@@ -4,10 +4,10 @@ import datetime
 import re
 import pytz
 
+import BaseRepository
 from DigitalAlloy.LogFileHelper import extractUserNameFromRequest
 from DigitalAlloy.Records.LogRecord import LogRecord
 import DigitalAlloy.Records.FieldNames as fn
-import BaseRepository
 
 username_regx = re.compile("username", re.IGNORECASE)
 

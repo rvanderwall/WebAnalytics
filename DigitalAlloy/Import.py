@@ -54,7 +54,6 @@ if IMPORT_VIDEO_INFORMATION_ONLY:
 if IMPORT_WEBLOG:
     video_info_repo = vr.VideoRecordRepository(fn.COLLECTION_VIDEO_INFO)
     descriptions = video_info_repo.get_descriptions()
-
     repo = lr.LogRecordRepository(LOG_COLLECTION_NAME)
     import_log_data_to_repo(repo, APACHE_LOG, SKIP_ROWS, USE_ROWS, descriptions=descriptions)
     repo.ensure_indexes()

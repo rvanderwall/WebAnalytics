@@ -4,8 +4,8 @@ import pymongo
 
 class BaseRepository():
 
-    def __init__(self, collection_name, host):
-        self.client = pymongo.MongoClient(host)
+    def __init__(self, collection_name, db_host):
+        self.client = pymongo.MongoClient(db_host)
         self.db = self.client.LogRecords
         self.collection = self.db[collection_name]
 
@@ -14,7 +14,4 @@ class BaseRepository():
 
     def insert_record(self, log_record):
         self.collection.save(log_record.to_json())
-
-    # def insert_dictionary(self, id, log_dictionary):
-    #     self.collection.save(log_dictionary)
 
