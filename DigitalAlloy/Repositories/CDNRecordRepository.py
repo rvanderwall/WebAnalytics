@@ -1,6 +1,6 @@
 __author__ = 'robert'
 
-import BaseRepository
+from BaseRepository import BaseRepository
 from DigitalAlloy.Records.CDNRecord import CDNRecord
 
 class CDNRecordRepository(BaseRepository):

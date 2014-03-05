@@ -1,4 +1,3 @@
-from DigitalAlloy.Repositories import LogRecordRepository as lr
 
 __author__ = 'rlv'
 
@@ -6,7 +5,8 @@ import datetime
 
 from DigitalAlloy.LogFileHelper import extractUserNameFromRequest
 from DigitalAlloy.Records import FieldNames as fn
-
+from DigitalAlloy.Repositories import LogRecordRepository as lr
+from DigitalAlloy.Repositories import VideoRecordRepository as vr
 
 dateString = '2013-09-21T08:00:00Z'
 dateString = '2013-09-22T00:00:00Z'
