@@ -55,6 +55,14 @@ def agent_is_a_bot(agent):
     else:
         return False
 
+#'"2005-12-02 10:56:20"'
+def get_datetime_from_string(date_string):
+    fmt = "%Y-%m-%d %H:%M:%S"
+    log_time = datetime.strptime(date_string, fmt)
+    log_timezone = timezone("Etc/GMT+4")
+    loc_log_time = log_timezone.localize(log_time)
+    utc_log_time = loc_log_time.astimezone(pytz.utc)
+    return utc_log_time
 
 #21/Sep/2013:06:32:01 -0400
 def get_date_from_string_log_time(date_string):

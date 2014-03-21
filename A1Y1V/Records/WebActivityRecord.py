@@ -10,7 +10,7 @@ from A1Y1V.Parsers.WebTimeHelper import get_date_from_string_log_time
 from A1Y1V.Parsers.WebAgentHelper import get_browser_from_agent, get_os_from_agent
 
 class WebActivityRecord:
-    INDEXABLE_FIELDS = [fn.USER_ID, fn.ACTIVITY_DATE]
+    INDEXABLE_FIELDS = [fn.USER_ID, fn.ACTIVITY_DATE, fn.ACTIVITY_TIME]
 
     all_data_valid = False
 

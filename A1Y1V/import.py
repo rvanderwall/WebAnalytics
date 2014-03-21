@@ -36,6 +36,7 @@ else:
 # -----WEB LOGS-----
 if IMPORT_WEBLOG:
     repo = warr.WebActivityRecordRepository(log_collection, db_host)
-    import_log_data_to_repo(repo, web_log_file, SKIP_ROWS, USE_ROWS)
+    #import_log_data_to_repo(repo, web_log_file, SKIP_ROWS, USE_ROWS)
     repo.ensure_indexes()
 
+print("DONE")
